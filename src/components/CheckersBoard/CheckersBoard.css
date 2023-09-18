@@ -1,0 +1,29 @@
+/* Style for the table */
+table {
+  border-collapse: collapse;
+  margin: 20px auto;
+}
+
+/* Style for the table cells */
+td {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bold;
+}
+
+/* Style for the even rows */
+tr:nth-child(even) td:nth-child(odd),
+tr:nth-child(odd) td:nth-child(even) {
+  background-color: #333; /* Dark color for even cells */
+  color: #fff; /* Text color for even cells */
+}
+
+/* Style for the odd rows */
+tr:nth-child(odd) td:nth-child(odd),
+tr:nth-child(even) td:nth-child(even) {
+  background-color: #fff; /* Light color for odd cells */
+  color: #000; /* Text color for odd cells */
+}
+
