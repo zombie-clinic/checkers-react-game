@@ -1,30 +1,60 @@
+// import React from 'react';
+import styles from './CheckersBoard.module.css';
+import checkerData from '../../data/data.json';
 
-import Cell from '../Cell/Cell';
-import css from './CheckersBoard.module.css';
+const CheckerBoard = () => {
+  const { black, white } = checkerData;
 
-
-// Functional component for the entire 8x8 table
-function CheckersBoard() {
-  // Generate the table rows and cells
-  const tableRows = [];
-  for (let row = 0; row < 8; row++) {
-    const cells = [];
-    for (let col = 0; col < 8; col++) {
-      const checker = (row + col) % 2 === 0 ? 'black' : 'white'; // Determine checker color
-      cells.push(<Cell key={`cell-${row}-${col}`} row={row} col={col} checker={checker} />);
+  // Function to determine the cell color based on its position
+  const getCellColor = (row, col) => {
+    // Check if the sum of row and column indices is even
+    if ((row + col) % 2 === 0) {
+      return 'white';
+    } else {
+      return 'black';
     }
-    tableRows.push(<tr className={css.tableRow} key={`row-${row}`}>{cells}</tr>);
-  }
+  };
+
+  // Function to render the table rows and cells
+  const renderTable = () => {
+    let blackCellCounter = 0; // Counter for numbering black cells
+
+    return Array.from({ length: 8 }, (_, row) => (
+      <tr key={row}>
+        {Array.from({ length: 8 }, (_, col) => {
+          const cellColor = getCellColor(row, col);
+
+          // Determine if the cell is black and should be numbered
+          const isBlackCell = cellColor === 'black';
+          const cellNumber = isBlackCell ? ++blackCellCounter : null;
+
+          // Determine if the cell should have "black" or "white" text
+          const cellText =
+            isBlackCell && black.includes(cellNumber)
+              ? 'black'
+              : isBlackCell && white.includes(cellNumber)
+              ? 'white'
+              : '';
+
+          return (
+            <td
+              key={col}
+              className={`${styles.cell} ${styles[cellColor]}`}
+              data-number={cellNumber}
+            >
+              {cellText}
+            </td>
+          );
+        })}
+      </tr>
+    ));
+  };
 
   return (
-    <div className={css.CheckersBoardWrap}>
-      <table border="1">
-        <tbody>
-          {tableRows}
-        </tbody>
-      </table>
-    </div>
+    <table className={styles.checkerboard}>
+      <tbody>{renderTable()}</tbody>
+    </table>
   );
-}
+};
 
-export default CheckersBoard;
+export default CheckerBoard;

@@ -1,4 +1,5 @@
-import { getCellColor, getTextColor } from '../../utils/getColor.js'
+import { getCellColor, getTextColor } from '../../../utils/getColor.js'
+import css from '../CheckersBoard.module.css'
 
 // Single cell
 function Cell(props) {
@@ -16,7 +17,7 @@ function Cell(props) {
     color: isEvenCell ? getTextColor(checker, true) : getTextColor(checker, false),
   };
 
-  return <td style={cellStyle}>{checker === 'no' ? '' : `Row ${row + 1}, Cell ${col + 1}`}</td>;
+  return <td className={css.tableCell} style={cellStyle}>{checker === 'no' ? '' : `Row ${row + 1}, Cell ${col + 1}`}</td>;
 }
 
 export default Cell

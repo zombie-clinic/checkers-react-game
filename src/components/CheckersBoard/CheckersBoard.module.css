@@ -1,29 +1,55 @@
-/* Style for the table */
-table {
+/* Style for the table
+/* .boardTable {
   border-collapse: collapse;
   margin: 20px auto;
-}
+} */
 
 /* Style for the table cells */
-td {
+/* .tableCell {
   width: 50px;
   height: 50px;
   text-align: center;
   vertical-align: middle;
   font-weight: bold;
-}
+}; */
 
 /* Style for the even rows */
-.tableRow:nth-child(even) td:nth-child(odd),
-.tableRow:nth-child(odd) td:nth-child(even) {
-  background-color: #333; /* Dark color for even cells */
-  color: #fff; /* Text color for even cells */
-}
+/* .tableRow:nth-child(even) .tableCell:nth-child(odd),
+.tableRow:nth-child(odd) .tableCell:nth-child(even) {
+  background-color: #333; 
+  color: #fff; 
+} */
 
 /* Style for the odd rows */
-.tableRow:nth-child(odd) td:nth-child(odd),
-.tableRow:nth-child(even) td:nth-child(even) {
-  background-color: #fff; /* Light color for odd cells */
-  color: #000; /* Text color for odd cells */
+/* .tableRow:nth-child(odd) .tableCell:nth-child(odd),
+.tableRow:nth-child(even) .tableCell:nth-child(even) {
+  background-color: #fff; 
+  color: #000; 
+} */
+
+
+/* CheckerBoard.module.css */
+.checkerboard {
+  border-collapse: collapse;
+  border: 2px solid black;
+}
+
+.cell {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Styling for black cells */
+.black {
+  background-color: black;
+  color: white;
+}
+
+/* Styling for white cells */
+.white {
+  background-color: white;
+  color: black;
 }
 
