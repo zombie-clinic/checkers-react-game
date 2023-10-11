@@ -148,7 +148,9 @@ const CheckerBoard = () => {
         // setApiData(JSON.parse(JSON.stringify(data)));
         console.log('this is fetched data');
         console.log(data);
-          // setBlack(data.state.black)
+          // Теперь можно обращаться к apiData.state
+          console.log(apiData.state);
+          // setBlack(apiData.state.black)
           // setWhite(data.state.white)
       } catch (error) {
         console.error('Error fetching data:', error);
