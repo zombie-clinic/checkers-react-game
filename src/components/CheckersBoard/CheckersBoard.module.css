@@ -39,17 +39,18 @@
   height: 50px;
   text-align: center;
   vertical-align: middle;
+  font-size: 30px;
 }
 
 /* Styling for black cells */
 .black {
-  background-color: black;
+  background-color: #0a9754;
   color: white;
 }
 
 /* Styling for white cells */
 .white {
-  background-color: white;
+  background-color: #fde9ad;
   color: black;
 }
 

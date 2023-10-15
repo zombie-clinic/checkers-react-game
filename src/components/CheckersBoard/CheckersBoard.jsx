@@ -45,9 +45,9 @@ const [white, setWhite] = useState(checkerData.white);
           const cellNumber = isBlackCell ? ++blackCellCounter : null;
           const cellText =
             isBlackCell && black.includes(cellNumber)
-              ? 'black'
+              ? '⚫'
               : isBlackCell && white.includes(cellNumber)
-              ? 'white'
+              ? '⚪'
               : '';
 
           return (
