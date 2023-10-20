@@ -1,20 +1,19 @@
-
-
 import { useState, useEffect } from 'react';
 
-import { CheckersApi } from '../../api/CheckersApi.js';
+import { getCheckersPositions } from '../../api/CheckersApi.js';
 import styles from './CheckersBoard.module.css';
 import checkerData from '../../data/data.json';
-
+let gameId = '7304942c-1bfd-4c23-8c83-c9902a866807';
 
 const CheckerBoard = () => {
 const [black, setBlack] = useState(checkerData.black);
 const [white, setWhite] = useState(checkerData.white);
 
+
   useEffect(() => {
     async function fetchData() {
       try {
-        const data = await CheckersApi();
+        const data = await getCheckersPositions(gameId);
           setBlack(data.state.black)
           setWhite(data.state.white)
       } catch (error) {
@@ -22,7 +21,12 @@ const [white, setWhite] = useState(checkerData.white);
       }
     }
     
-    fetchData();
+    const fetchDataInterval = setInterval(fetchData, 1000); // 1 time per second
+
+    return () => {
+      clearInterval(fetchDataInterval); // Clear the interval when the component unmounts
+    };
+
   }, []); // Empty dependency array to run this effect only once when the component mounts
 
 
