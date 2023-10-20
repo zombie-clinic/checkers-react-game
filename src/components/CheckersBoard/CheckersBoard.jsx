@@ -1,3 +1,5 @@
+
+
 import { useState, useEffect } from 'react';
 
 import { getCheckersPositions } from '../../api/CheckersApi.js';
@@ -16,6 +18,7 @@ const [white, setWhite] = useState(checkerData.white);
         const data = await getCheckersPositions(gameId);
           setBlack(data.state.black)
           setWhite(data.state.white)
+          console.log('i`m fetching')
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -27,8 +30,8 @@ const [white, setWhite] = useState(checkerData.white);
       clearInterval(fetchDataInterval); // Clear the interval when the component unmounts
     };
 
+    // fetchData();
   }, []); // Empty dependency array to run this effect only once when the component mounts
-
 
   const getCellColor = (row, col) => {
     if ((row + col) % 2 === 0) {
