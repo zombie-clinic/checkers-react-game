@@ -18,6 +18,7 @@ const instance = axios.create ({
 export const getCheckersPositions = async (gameId) => {
   
   const { data } = await instance.get(`/${gameId}/moves`)
+  console.log('fetching board state')
   return data;
 }
 

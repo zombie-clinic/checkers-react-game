@@ -1,5 +1,3 @@
-
-
 import { useState, useEffect } from 'react';
 
 import { getCheckersPositions } from '../../api/CheckersApi.js';
@@ -10,6 +8,7 @@ let gameId = '7304942c-1bfd-4c23-8c83-c9902a866807';
 const CheckerBoard = () => {
 const [black, setBlack] = useState(checkerData.black);
 const [white, setWhite] = useState(checkerData.white);
+const [isOpponentTurn, setIsOpponentTurn] = useState(true); // Add a state variable
 
 
   useEffect(() => {
@@ -18,20 +17,24 @@ const [white, setWhite] = useState(checkerData.white);
         const data = await getCheckersPositions(gameId);
           setBlack(data.state.black)
           setWhite(data.state.white)
-          console.log('i`m fetching')
+          setIsOpponentTurn(false); // Update the state variable
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     }
     
-    const fetchDataInterval = setInterval(fetchData, 1000); // 1 time per second
+    const fetchDataInterval = setInterval(() => {
+      if (isOpponentTurn) {
+        fetchData();
+      }
+    }, 1000); // 1 time per second
 
     return () => {
       clearInterval(fetchDataInterval); // Clear the interval when the component unmounts
     };
 
-    // fetchData();
-  }, []); // Empty dependency array to run this effect only once when the component mounts
+  }, [isOpponentTurn]); // Add dataFetched to the dependency array
+
 
   const getCellColor = (row, col) => {
     if ((row + col) % 2 === 0) {
