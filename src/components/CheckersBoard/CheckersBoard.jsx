@@ -8,7 +8,18 @@ let gameId = '7304942c-1bfd-4c23-8c83-c9902a866807';
 const CheckerBoard = () => {
 const [black, setBlack] = useState(checkerData.black);
 const [white, setWhite] = useState(checkerData.white);
-const [isOpponentTurn, setIsOpponentTurn] = useState(true); // Add a state variable
+const [isOpponentTurn, setIsOpponentTurn] = useState(true); // opponent's turn is default
+const [moveData, setMoveData] = useState(
+  {
+    side: '',
+    move: '',
+    state: {
+      black: [],
+      white: [],
+    },
+    playerId: 0,
+  }
+); //object with hadlers call results
 
 
   useEffect(() => {

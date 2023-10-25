@@ -1,5 +1,15 @@
 import axios from 'axios';
 
+const moveData = {
+  side: 'BLACK',
+  move: '10-14',
+  state: {
+    black: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    white: [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32],
+  },
+  playerId: 1,
+};
+
 // const API_KEY = 'PUT IT HERE IF NEEDED';
 // const BASE_URL = 'http://localhost:8080/games/';
 
@@ -8,7 +18,6 @@ import axios from 'axios';
 //   const { data } = await axios.get(url);
 //   return data;
 // };
-
 
 const instance = axios.create ({
   baseURL: 'http://localhost:8080/games'
@@ -22,18 +31,14 @@ export const getCheckersPositions = async (gameId) => {
   return data;
 }
 
-// export const putMoveData = async (gameId) => {
-//   const { response } = await instance.put
-// }
-
-// /move/{gameId}
-// Make a move within a game
-// game
+export const sendMoveData = async (gameId) => {
+  const { data } = await instance.put(`/${gameId}/moves`, moveData)
+  console.log('response on put moveData')
+  return data;
+}
 
 
 // the game API
-
-
 
 // GET
 // /game
