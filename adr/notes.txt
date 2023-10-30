@@ -1,2 +1,9 @@
 сделать сбор данных с доски для формирования объекта
 moveData
+
+стартовая форма - кнопки:
+start new game
+join game
+continue game
+
+(back)

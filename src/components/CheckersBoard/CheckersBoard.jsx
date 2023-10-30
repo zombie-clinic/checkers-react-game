@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
-
+// import StartForm from ../StartForm/StartForm.jsx
 import { getCheckersPositions } from '../../api/CheckersApi.js';
 import styles from './CheckersBoard.module.css';
-import checkerData from '../../data/data.json';
-let gameId = '7304942c-1bfd-4c23-8c83-c9902a866807';
+import checkerData from '../../data/newgame.json';
+// let gameId = '7304942c-1bfd-4c23-8c83-c9902a866807';
 
 const CheckerBoard = () => {
+const [gameId, setGameId] = useState(null)
 const [black, setBlack] = useState(checkerData.black);
 const [white, setWhite] = useState(checkerData.white);
 const [isOpponentTurn, setIsOpponentTurn] = useState(true); // opponent's turn is default
+const [validMoves, setValidMoves] = useState(true);
 const [moveData, setMoveData] = useState(
   {
     side: '',
@@ -29,6 +31,7 @@ const [moveData, setMoveData] = useState(
           setBlack(data.state.black)
           setWhite(data.state.white)
           setIsOpponentTurn(false); // Update the state variable
+
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -55,6 +58,10 @@ const [moveData, setMoveData] = useState(
     }
   };
 
+
+  const handleCellClick = (cellNumber) => {
+    
+  }
 
   const renderTable = () => {
     let blackCellCounter = 0;
