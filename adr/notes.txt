@@ -7,3 +7,5 @@ join game
 continue game
 
 (back)
+
+test note
