@@ -59,9 +59,9 @@ const [moveData, setMoveData] = useState(
   };
 
 
-  const handleCellClick = (cellNumber) => {
+  // const handleCellClick = (cellNumber) => {
     
-  }
+  // }
 
   const renderTable = () => {
     let blackCellCounter = 0;

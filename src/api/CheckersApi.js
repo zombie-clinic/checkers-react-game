@@ -31,11 +31,11 @@ export const getCheckersPositions = async (gameId) => {
   return data;
 }
 
-export const sendMoveData = async (gameId) => {
-  const { data } = await instance.put(`/${gameId}/moves`, moveData)
-  console.log('response on put moveData')
-  return data;
-}
+// export const sendMoveData = async (gameId) => {
+//   const { data } = await instance.put(`/${gameId}/moves`, moveData)
+//   console.log('response on put moveData')
+//   return data;
+// }
 
 
 // the game API
