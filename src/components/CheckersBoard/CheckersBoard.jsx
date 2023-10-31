@@ -3,37 +3,52 @@ import { useState, useEffect } from 'react';
 import { getCheckersPositions } from '../../api/CheckersApi.js';
 import styles from './CheckersBoard.module.css';
 import checkerData from '../../data/newgame.json';
-// let gameId = '7304942c-1bfd-4c23-8c83-c9902a866807';
+let gameId = '7304942c-1bfd-4c23-8c83-c9902a866807';
 
 const CheckerBoard = () => {
-const [gameId, setGameId] = useState(null)
+// const [gameId, setGameId] = useState(null)
 const [black, setBlack] = useState(checkerData.black);
 const [white, setWhite] = useState(checkerData.white);
 const [isOpponentTurn, setIsOpponentTurn] = useState(true); // opponent's turn is default
-const [validMoves, setValidMoves] = useState(true);
-const [moveData, setMoveData] = useState(
-  {
-    side: '',
-    move: '',
-    state: {
-      black: [],
-      white: [],
-    },
-    playerId: 0,
-  }
-); //object with hadlers call results
+// const [validMoves, setValidMoves] = useState(true);
+// const [moveData, setMoveData] = useState(
+//   {
+//     side: '',
+//     move: '',
+//     state: {
+//       black: [],
+//       white: [],
+//     },
+//     playerId: 0,
+//   }
+// ); //object with hadlers call results
 
+// Utility function to compare two arrays
+function arraysAreEqual(arr1, arr2) {
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const data = await getCheckersPositions(gameId);
-          setBlack(data.state.black)
-          setWhite(data.state.white)
+        const newData = await getCheckersPositions(gameId);
+        if (!arraysAreEqual(newData.state.black, black) || !arraysAreEqual(newData.state.white, white)) {
+          setBlack(newData.state.black)
+          setWhite(newData.state.white)
           setIsOpponentTurn(false); // Update the state variable
-
+        }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching newData:', error);
       }
     }
     
@@ -60,7 +75,9 @@ const [moveData, setMoveData] = useState(
 
 
   // const handleCellClick = (cellNumber) => {
-    
+  //   if (possibleMoves[cellNumber]) {
+
+  //   }
   // }
 
   const renderTable = () => {
