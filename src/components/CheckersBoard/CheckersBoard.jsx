@@ -24,31 +24,31 @@ const [isOpponentTurn, setIsOpponentTurn] = useState(true); // opponent's turn i
 // ); //object with hadlers call results
 
 // Utility function to compare two arrays
-function arraysAreEqual(arr1, arr2) {
-  if (arr1.length !== arr2.length) {
-    return false;
-  }
+// function arraysAreEqual(arr1, arr2) {
+//   if (arr1.length !== arr2.length) {
+//     return false;
+//   }
 
-  for (let i = 0; i < arr1.length; i++) {
-    if (arr1[i] !== arr2[i]) {
-      return false;
-    }
-  }
+//   for (let i = 0; i < arr1.length; i++) {
+//     if (arr1[i] !== arr2[i]) {
+//       return false;
+//     }
+//   }
 
-  return true;
-}
+//   return true;
+// }
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const newData = await getCheckersPositions(gameId);
-        if (!arraysAreEqual(newData.state.black, black) || !arraysAreEqual(newData.state.white, white)) {
-          setBlack(newData.state.black)
-          setWhite(newData.state.white)
+        const data = await getCheckersPositions(gameId);
+        // if (!arraysAreEqual(data.state.black, black) || !arraysAreEqual(data.state.white, white)) {
+          setBlack(data.state.black)
+          setWhite(data.state.white)
           setIsOpponentTurn(false); // Update the state variable
-        }
+        // }
       } catch (error) {
-        console.error('Error fetching newData:', error);
+        console.error('Error fetching data:', error);
       }
     }
     
@@ -62,7 +62,7 @@ function arraysAreEqual(arr1, arr2) {
       clearInterval(fetchDataInterval); // Clear the interval when the component unmounts
     };
 
-  }, [isOpponentTurn]); // Add dataFetched to the dependency array
+  }, [isOpponentTurn, black, white]); // Add dataFetched to the dependency array
 
 
   const getCellColor = (row, col) => {
