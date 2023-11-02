@@ -41,12 +41,14 @@
   text-align: center;
   vertical-align: middle;
   font-size: 30px;
+  
 }
 
 /* Styling for black cells */
 .black {
   background-color: #0a9754;
   color: white;
+  position: relative;
 }
 
 /* Styling for white cells */
@@ -56,9 +58,9 @@
 }
 
 .cellLabel {
-  font-size: 5px;
-  display: flex;
-  flex: start;
-
+  font-size: 8px;
+  position: absolute;
+  top: 1px;
+  left: 5px;
 }
 

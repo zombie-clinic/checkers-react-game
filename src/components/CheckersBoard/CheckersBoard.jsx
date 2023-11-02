@@ -80,7 +80,7 @@ const [isOpponentTurn, setIsOpponentTurn] = useState(true); // opponent's turn i
               data-number={cellNumber}
             >
               {cellText}
-              {/* <div className={styles.cellLabel}>{cellNumber}</div> */}
+              <div className={styles.cellLabel}>{cellNumber}</div>
             </td>
           );
         })}
