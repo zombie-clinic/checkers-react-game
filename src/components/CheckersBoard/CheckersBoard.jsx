@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 // import StartForm from ../StartForm/StartForm.jsx
 import { getCheckersPositions } from '../../api/CheckersApi.js';
+import { isArraysEqual } from '../../utils/isArraysEqual.js';
+import { getCellColor } from '../../utils/getCellColor.js';
 import styles from './CheckersBoard.module.css';
 import checkerData from '../../data/newgame.json';
 let gameId = '7304942c-1bfd-4c23-8c83-c9902a866807';
@@ -23,30 +25,15 @@ const [isOpponentTurn, setIsOpponentTurn] = useState(true); // opponent's turn i
 //   }
 // ); //object with hadlers call results
 
-// Utility function to compare two arrays
-// function arraysAreEqual(arr1, arr2) {
-//   if (arr1.length !== arr2.length) {
-//     return false;
-//   }
-
-//   for (let i = 0; i < arr1.length; i++) {
-//     if (arr1[i] !== arr2[i]) {
-//       return false;
-//     }
-//   }
-
-//   return true;
-// }
-
   useEffect(() => {
     async function fetchData() {
       try {
         const data = await getCheckersPositions(gameId);
-        // if (!arraysAreEqual(data.state.black, black) || !arraysAreEqual(data.state.white, white)) {
+        if (!isArraysEqual(data.state.black, black) || !isArraysEqual(data.state.white, white)) {
           setBlack(data.state.black)
           setWhite(data.state.white)
           setIsOpponentTurn(false); // Update the state variable
-        // }
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -65,20 +52,11 @@ const [isOpponentTurn, setIsOpponentTurn] = useState(true); // opponent's turn i
   }, [isOpponentTurn, black, white]); // Add dataFetched to the dependency array
 
 
-  const getCellColor = (row, col) => {
-    if ((row + col) % 2 === 0) {
-      return 'white';
-    } else {
-      return 'black';
+  const handleCellClick = (cellNumber) => {
+    if (possibleMoves[cellNumber]) {
+
     }
-  };
-
-
-  // const handleCellClick = (cellNumber) => {
-  //   if (possibleMoves[cellNumber]) {
-
-  //   }
-  // }
+  }
 
   const renderTable = () => {
     let blackCellCounter = 0;
@@ -102,6 +80,7 @@ const [isOpponentTurn, setIsOpponentTurn] = useState(true); // opponent's turn i
               data-number={cellNumber}
             >
               {cellText}
+              {/* <div className={styles.cellLabel}>{cellNumber}</div> */}
             </td>
           );
         })}

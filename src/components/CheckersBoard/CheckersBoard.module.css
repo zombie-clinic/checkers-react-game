@@ -34,6 +34,7 @@
   border: 2px solid black;
 }
 
+
 .cell {
   width: 50px;
   height: 50px;
@@ -52,5 +53,12 @@
 .white {
   background-color: #fde9ad;
   color: black;
+}
+
+.cellLabel {
+  font-size: 5px;
+  display: flex;
+  flex: start;
+
 }
 
