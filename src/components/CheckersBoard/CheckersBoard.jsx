@@ -2,20 +2,20 @@ import { useState, useEffect } from 'react';
 
 import { getCheckersPositions } from '../../api/CheckersApi.js';
 import styles from './CheckersBoard.module.css';
-import checkerData from '../../data/data.json';
+import checkerData from '../../data/newgame.json';
 let gameId = '7304942c-1bfd-4c23-8c83-c9902a866807';
 
 const CheckerBoard = () => {
-const [black, setBlack] = useState(checkerData.black);
-const [white, setWhite] = useState(checkerData.white);
+const [dark, setDark] = useState(checkerData.dark);
+const [light, setLight] = useState(checkerData.light);
 
 
   useEffect(() => {
     async function fetchData() {
       try {
         const data = await getCheckersPositions(gameId);
-          setBlack(data.state.black)
-          setWhite(data.state.white)
+          setDark(data.state.dark)
+          setLight(data.state.light)
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -48,9 +48,9 @@ const [white, setWhite] = useState(checkerData.white);
           const isBlackCell = cellColor === 'black';
           const cellNumber = isBlackCell ? ++blackCellCounter : null;
           const cellText =
-            isBlackCell && black.includes(cellNumber)
+            isBlackCell && dark.includes(cellNumber)
               ? '⚫'
-              : isBlackCell && white.includes(cellNumber)
+              : isBlackCell && light.includes(cellNumber)
               ? '⚪'
               : '';
 
