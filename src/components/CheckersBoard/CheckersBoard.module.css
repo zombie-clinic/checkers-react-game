@@ -46,6 +46,7 @@
 .black {
   background-color: #0a9754;
   color: white;
+  position: relative;
 }
 
 /* Styling for white cells */
@@ -54,3 +55,9 @@
   color: black;
 }
 
+.cellLabel {
+  font-size: 8px;
+  position: absolute;
+  top: 1px;
+  left: 5px;
+}

@@ -54,19 +54,20 @@ const [light, setLight] = useState(checkerData.light);
               ? '⚪'
               : '';
 
-          return (
-            <td
-              key={col}
-              className={`${styles.cell} ${styles[cellColor]}`}
-              data-number={cellNumber}
-            >
-              {cellText}
-            </td>
-          );
-        })}
-      </tr>
-    ));
-  };
+              return (
+                <td
+                  key={col}
+                  className={`${styles.cell} ${styles[cellColor]}`}
+                  data-number={cellNumber}
+                >
+                  {cellText}
+                  <div className={styles.cellLabel}>{cellNumber}</div>
+                </td>
+              );
+            })}
+          </tr>
+        ));
+      };
 
 
   return (
