@@ -9,8 +9,8 @@ let gameId = '7304942c-1bfd-4c23-8c83-c9902a866807';
 
 const CheckerBoard = () => {
 // const [gameId, setGameId] = useState(null)
-const [black, setBlack] = useState(checkerData.black);
-const [white, setWhite] = useState(checkerData.white);
+const [dark, setDark] = useState(checkerData.dark);
+const [light, setLight] = useState(checkerData.light);
 const [isOpponentTurn, setIsOpponentTurn] = useState(true); // opponent's turn is default
 // const [validMoves, setValidMoves] = useState(true);
 // const [moveData, setMoveData] = useState(
@@ -29,9 +29,9 @@ const [isOpponentTurn, setIsOpponentTurn] = useState(true); // opponent's turn i
     async function fetchData() {
       try {
         const data = await getCheckersPositions(gameId);
-        if (!isArraysEqual(data.state.black, black) || !isArraysEqual(data.state.white, white)) {
-          setBlack(data.state.black)
-          setWhite(data.state.white)
+        if (!isArraysEqual(data.state.dark, dark) || !isArraysEqual(data.state.light, light)) {
+          setDark(data.state.dark)
+          setLight(data.state.light)
           setIsOpponentTurn(false); // Update the state variable
         }
       } catch (error) {
@@ -49,14 +49,14 @@ const [isOpponentTurn, setIsOpponentTurn] = useState(true); // opponent's turn i
       clearInterval(fetchDataInterval); // Clear the interval when the component unmounts
     };
 
-  }, [isOpponentTurn, black, white]); // Add dataFetched to the dependency array
+  }, [isOpponentTurn, dark, light]); // Add dataFetched to the dependency array
 
 
-  const handleCellClick = (cellNumber) => {
-    if (possibleMoves[cellNumber]) {
+  // const handleCellClick = (cellNumber) => {
+  //   if (possibleMoves[cellNumber]) {
 
-    }
-  }
+  //   }
+  // }
 
   const renderTable = () => {
     let blackCellCounter = 0;
@@ -67,9 +67,9 @@ const [isOpponentTurn, setIsOpponentTurn] = useState(true); // opponent's turn i
           const isBlackCell = cellColor === 'black';
           const cellNumber = isBlackCell ? ++blackCellCounter : null;
           const cellText =
-            isBlackCell && black.includes(cellNumber)
+            isBlackCell && dark.includes(cellNumber)
               ? '⚫'
-              : isBlackCell && white.includes(cellNumber)
+              : isBlackCell && light.includes(cellNumber)
               ? '⚪'
               : '';
 
