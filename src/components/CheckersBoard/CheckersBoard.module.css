@@ -49,6 +49,11 @@
   background-color: #0a9754;
   color: white;
   position: relative;
+  /* display: flex;
+  flex-direction: row;
+  justify-content: center;
+  text-align: center; */
+  
 }
 
 /* Styling for white cells */
