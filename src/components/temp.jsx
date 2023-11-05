@@ -108,3 +108,50 @@ const CheckerBoard = () => {
 };
 
 export default CheckerBoard;
+
+
+//************************************************* */
+
+import axios from 'axios';
+
+const instance = axios.create({
+  baseURL: 'http://localhost:8080/games'
+});
+
+export const startNewGame = async (player = 1, side = 'LIGHT') => {
+  try {
+    const requestData = {
+      playerId: player,
+      side: side,
+    };
+
+    const response = await instance.post('/', requestData);
+
+    if (response.status === 201) {
+      const newGameData = response.data;
+      // You can do something with newGameData here
+      return newGameData;
+    } else {
+      // Handle other status codes or errors as needed
+      throw new Error(`Failed to start a new game. Status code: ${response.status}`);
+    }
+  } catch (error) {
+    // Handle any request or network errors
+    console.error('Error starting a new game:', error);
+    throw error;
+  }
+};
+
+// Save to grepper
+// In this code:
+
+// We create an Axios request data object requestData containing the playerId and side properties.
+// We send a POST request to the base URL with an empty path ('/') and the requestData as the request body.
+// We check if the response status is 201 (Created). If it is, we assume the request was successful, and you can access the newGameData from the response.data.
+// If the response status is not 201, you can handle other status codes or errors as needed.
+// We use try-catch to catch and handle any request or network errors that might occur during the HTTP request. Errors are logged and rethrown so that you can handle them as needed in your application.
+// This function should meet the described conditions and allow you to start a new game and handle the response data or errors accordingly.
+
+
+
+

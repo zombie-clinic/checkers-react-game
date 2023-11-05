@@ -1,0 +1,4 @@
+.buttonWrap{
+    display: flex;
+    flex-direction: column;
+}

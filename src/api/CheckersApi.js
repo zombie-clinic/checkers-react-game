@@ -23,6 +23,17 @@ const instance = axios.create ({
   baseURL: 'http://localhost:8080/games'
 })
 
+export const startNewGame = async (player=1, side='LIGHT') => {
+  const requestData = {
+    playerId: player,
+    side: side,
+  };
+  const { newGameData } = await instance.post('/', requestData)
+  // const newGameData = response.data;
+  console.log('posting a new game')
+  return newGameData;
+}
+
 //Get current state of a game (the result of the last move)
 export const getCheckersPositions = async (gameId) => {
   
