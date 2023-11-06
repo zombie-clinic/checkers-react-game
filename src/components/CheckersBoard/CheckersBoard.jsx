@@ -75,10 +75,6 @@ const [light, setLight] = useState(checkerData.light);
     <table className={styles.checkerboard}>
       <tbody>{renderTable()}</tbody>
     </table>
-      <div>
-      <h2>Checkers Data</h2>
-      <pre>{JSON.stringify(checkerData)}</pre>
-      </div>
     </div>
   );
 };
