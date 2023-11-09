@@ -5,12 +5,13 @@ import { isArraysEqual } from '../../utils/isArraysEqual.js';
 import { getCellColor } from '../../utils/getCellColor.js';
 import styles from './CheckersBoard.module.css';
 import checkerData from '../../data/newgame.json';
-let gameId = '7304942c-1bfd-4c23-8c83-c9902a866807';
+// let gameId = '7304942c-1bfd-4c23-8c83-c9902a866807';
+let gameId = '5949088b-f989-4526-928a-caa47050e288'
 
 const CheckerBoard = () => {
-// const [playerId, setplayerId] = useState(null); //on gameStart
-// const [gameId, setGameId] = useState(null); //on gameStart
-// const [side, setSide] = useState(null); //on gameStart
+const [playerId, setPlayerId] = useState(1); //on gameStart
+const [gameId, setGameId] = useState(null); //on gameStart
+const [side, setSide] = useState('LIGHT'); //on gameStart
 const [dark, setDark] = useState(checkerData.dark);
 const [light, setLight] = useState(checkerData.light);
 const [isOpponentTurn, setIsOpponentTurn] = useState(true); // opponent's turn is default
@@ -25,6 +26,19 @@ const [moveData, setMoveData] = useState({});
 //     },
 //     playerId: 0,
 //   }
+
+
+  // Function to start a new game and set gameId and side
+  const initializeNewGame = async () => {
+    const newGameData = await startNewGame();
+    setGameId(newGameData.gameId);
+    setSide(newGameData.side);
+  };
+
+  useEffect(() => {
+    // Run the startNewGame function when the component is loaded
+    initializeNewGame();
+  }, []);
 
 
   useEffect(() => {
