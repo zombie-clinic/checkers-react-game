@@ -5,12 +5,12 @@ import { isArraysEqual } from '../../utils/isArraysEqual.js';
 import { getCellColor } from '../../utils/getCellColor.js';
 import styles from './CheckersBoard.module.css';
 import checkerData from '../../data/newgame.json';
-// let gameId = '7304942c-1bfd-4c23-8c83-c9902a866807';
-let gameId = '5949088b-f989-4526-928a-caa47050e288'
+// let gameId = '0a83d555-abfe-42f9-8d46-0d23d7a1d863';
+
 
 const CheckerBoard = () => {
 const [playerId, setPlayerId] = useState(1); //on gameStart
-const [gameId, setGameId] = useState(null); //on gameStart
+const [gameId, setGameId] = useState('0a83d555-abfe-42f9-8d46-0d23d7a1d863'); //on gameStart
 const [side, setSide] = useState('LIGHT'); //on gameStart
 const [dark, setDark] = useState(checkerData.dark);
 const [light, setLight] = useState(checkerData.light);
