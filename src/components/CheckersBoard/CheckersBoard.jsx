@@ -21,20 +21,14 @@ const CheckerBoard = () => {
   const [startMoveCell, setStartMoveCell] = useState(null); // Начальная клетка
   const [endMoveCell, setEndMoveCell] = useState(null); // Конечная клетка
   const [highlightedCell, setHighlightedCell] = useState(null); // Подсвеченная ячейка
+  const [moveData, setMoveData] = useState(null); // Состояние для moveData только для CheckersBoardDebug!
 
   // Function to start a new game and set gameId and side
   const initializeNewGame = async () => {
-    // try {
     const newGameData = await startNewLobby(1, 'LIGHT');
-    // setGameId(newGameData.gameId);
-    setTestGameId(newGameData.gameId); // REMOVE IT after tests
+    // setTestGameId(newGameData.gameId); // REMOVE IT after tests
     setSide(newGameData.side);
     console.log(newGameData.gameId);
-    // } catch (error) {
-    //   // Handle any request or network errors
-    //   console.error('Error starting a new game:', error);
-    //   throw error;
-    // }
   };
 
   useEffect(() => {
@@ -85,7 +79,7 @@ const CheckerBoard = () => {
       const move = `${startMoveCell}-${cellNumber}`;
       if (possibleMoves.includes(move)) {
         // Валидный ход
-        const moveData = {
+        const newMoveData = {
           side,
           move,
           state: {
@@ -94,7 +88,8 @@ const CheckerBoard = () => {
           },
           playerId,
         };
-        console.log('Move data:', moveData);
+        setMoveData(newMoveData); // Обновляем состояние moveData
+        console.log('Move data:', newMoveData);
         // Отправить данные хода на сервер (добавить)
         // reset состояния после успешного хода
         setStartMoveCell(null);

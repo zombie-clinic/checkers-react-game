@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './CheckersBoardDebug.module.css';
 
-const CheckersBoardDebug = ({ state }) => {
+function CheckersBoardDebug({ state }) {
   return (
-    <div className={styles.debugState}>
-      <h2>Debug State</h2>
-      <table className={styles.table}>
+    <div style={{ marginTop: '20px' }}>
+      <h3>Debug State</h3>
+      <table border="1" style={{ width: '100%', textAlign: 'left' }}>
         <thead>
           <tr>
             <th>Key</th>
@@ -17,12 +17,13 @@ const CheckersBoardDebug = ({ state }) => {
           {Object.entries(state).map(([key, value]) => (
             <tr key={key}>
               <td>{key}</td>
+              {/* Проверяем, является ли value объектом, массивом или другим типом */}
               <td>
-                {typeof value === 'object' ? (
-                  <pre>{JSON.stringify(value, null, 2)}</pre>
-                ) : (
-                  value.toString()
-                )}
+                {value !== undefined
+                  ? typeof value === 'object'
+                    ? JSON.stringify(value)
+                    : value.toString()
+                  : 'undefined'}
               </td>
             </tr>
           ))}
@@ -30,7 +31,7 @@ const CheckersBoardDebug = ({ state }) => {
       </table>
     </div>
   );
-};
+}
 
 CheckersBoardDebug.propTypes = {
   state: PropTypes.object.isRequired,
