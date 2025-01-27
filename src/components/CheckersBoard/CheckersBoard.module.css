@@ -27,13 +27,11 @@
   color: #000; 
 } */
 
-
 /* CheckerBoard.module.css */
 .checkerboard {
   border-collapse: collapse;
   border: 2px solid black;
 }
-
 
 .cell {
   width: 50px;
@@ -41,7 +39,31 @@
   text-align: center;
   vertical-align: middle;
   font-size: 30px;
-  
+
+  /* position: relative; */
+  cursor: pointer;
+}
+
+.checkerPiece {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px; /* Увеличиваем размер символа */
+  transition: transform 0.3s ease;
+}
+
+.pulsing {
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
 }
 
 /* Styling for black cells */
@@ -53,7 +75,7 @@
   flex-direction: row;
   justify-content: center;
   text-align: center; */
-  }
+}
 
 /* Styling for white cells */
 .white {

@@ -20,7 +20,7 @@ import axios from 'axios';
 // };
 
 const instance = axios.create({
-  baseURL: 'http://localhost:8080/games/',
+  baseURL: 'http://localhost:8080/games',
 });
 
 export const startNewLobby = async (player = 1, side = 'LIGHT') => {
@@ -28,13 +28,19 @@ export const startNewLobby = async (player = 1, side = 'LIGHT') => {
     playerId: player,
     side: side,
   };
-  const newGameData = await instance.post(
-    'http://localhost:8080/games/',
-    requestData
-  );
-  // const newGameData = response.data;
-  console.log('posting a new game');
-  return newGameData;
+  const response = await instance.post('/', requestData);
+  console.log('Posting a new game:', response.data);
+  return response.data;
+};
+
+export const joinGame = async (gameId, playerId) => {
+  const requestData = {
+    gameId,
+    playerId,
+  };
+  const response = await instance.put('/', requestData);
+  console.log('Joining game:', response.data);
+  return response.data;
 };
 
 //Get current state of a game (the result of the last move)

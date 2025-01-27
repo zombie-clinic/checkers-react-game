@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { startNewLobby } from '../../api/CheckersApi.js';
+import CheckersBoardDebug from '../CheckersBoardDebug/CheckersBoardDebug.jsx';
 // import StartForm from ../StartForm/StartForm.jsx
 import { getCheckersPositions } from '../../api/CheckersApi.js';
 import { isArraysEqual } from '../../utils/isArraysEqual.js';
@@ -17,16 +18,9 @@ const CheckerBoard = () => {
   const [light, setLight] = useState(checkerData.light);
   const [isOpponentTurn, setIsOpponentTurn] = useState(true); // opponent's turn is default
   const [possibleMoves, setpossibleMoves] = useState([]); //
-  const [moveData, setMoveData] = useState({});
-  //   {
-  //     side: '',
-  //     move: '',
-  //     state: {
-  //       black: [],
-  //       white: [],
-  //     },
-  //     playerId: 0,
-  //   }
+  const [startMoveCell, setStartMoveCell] = useState(null); // Начальная клетка
+  const [endMoveCell, setEndMoveCell] = useState(null); // Конечная клетка
+  const [highlightedCell, setHighlightedCell] = useState(null); // Подсвеченная ячейка
 
   // Function to start a new game and set gameId and side
   const initializeNewGame = async () => {
@@ -78,59 +72,44 @@ const CheckerBoard = () => {
   }, [gameId, isOpponentTurn, dark, light]); // Add dataFetched to the dependency array
 
   const handleCellClick = cellNumber => {
-    if (possibleMoves[cellNumber]) {
-      const possibleMove = possibleMoves[cellNumber][0]; // Assuming there is only one move for simplicity
-      const destinationCellNumber = possibleMove.destination;
-
-      // Create a new click event listener for the destination cell
-      const destinationCell = document.querySelector(
-        `[datanumber='${destinationCellNumber}']`
-      ); // TODO: highlight destinationCell
-      if (destinationCell) {
-        destinationCell.addEventListener('click', () => {
-          if (possibleMove.isTerminal) {
-            const moveString = `${cellNumber}-${destinationCellNumber}`;
-            setMoveData({
-              side,
-              move: moveString,
-              state: {
-                dark,
-                light,
-                playerId,
-              },
-            });
-          }
-        });
+    if (startMoveCell === null) {
+      // Проверяем, принадлежит ли шашка текущей стороне
+      const playerCheckers = side === 'LIGHT' ? light : dark;
+      if (playerCheckers.includes(cellNumber)) {
+        setStartMoveCell(cellNumber);
+        setHighlightedCell(cellNumber); // Подсветка ячейки
+      }
+    } else {
+      // Устанавливаем конечную ячейку
+      setEndMoveCell(cellNumber);
+      const move = `${startMoveCell}-${cellNumber}`;
+      if (possibleMoves.includes(move)) {
+        // Валидный ход
+        const moveData = {
+          side,
+          move,
+          state: {
+            dark,
+            light,
+          },
+          playerId,
+        };
+        console.log('Move data:', moveData);
+        // Отправить данные хода на сервер (добавить)
+        // reset состояния после успешного хода
+        setStartMoveCell(null);
+        setHighlightedCell(null);
+      } else {
+        // Невалидный ход
+        setStartMoveCell(null);
+        setHighlightedCell(null);
       }
     }
   };
 
-  useEffect(() => {
-    // Attach event listeners to cells with "data-number" based on possible moves
-    Object.keys(possibleMoves).forEach(cellNumber => {
-      const cell = document.querySelector(`[data-number="${cellNumber}"]`);
-      if (cell) {
-        cell.addEventListener('click', () => {
-          handleCellClick(cellNumber);
-        });
-      }
-    });
-
-    // Clear event listeners when the component unmounts
-    return () => {
-      Object.keys(possibleMoves).forEach(cellNumber => {
-        const cell = document.querySelector(`[data-number="${cellNumber}"]`);
-        if (cell) {
-          cell.removeEventListener('click', () => {
-            handleCellClick(cellNumber);
-          });
-        }
-      });
-    };
-  }, [possibleMoves]);
-
   console.log(testGameId);
 
+  // Генерация доски
   const renderTable = () => {
     let blackCellCounter = 0;
     return Array.from({ length: 8 }, (_, row) => (
@@ -139,6 +118,8 @@ const CheckerBoard = () => {
           const cellColor = getCellColor(row, col);
           const isBlackCell = cellColor === 'black';
           const cellNumber = isBlackCell ? ++blackCellCounter : null;
+          const isHighlighted = cellNumber === highlightedCell;
+
           const cellText =
             isBlackCell && dark.includes(cellNumber)
               ? '⚫'
@@ -151,8 +132,15 @@ const CheckerBoard = () => {
               key={col}
               className={`${styles.cell} ${styles[cellColor]}`}
               data-number={cellNumber}
+              onClick={() => handleCellClick(cellNumber)}
             >
-              {cellText}
+              <div
+                className={`${styles.checkerPiece} ${
+                  isHighlighted && cellText ? styles.pulsing : ''
+                }`}
+              >
+                {cellText}
+              </div>
               <div className={styles.cellLabel}>{cellNumber}</div>
             </td>
           );
@@ -166,6 +154,20 @@ const CheckerBoard = () => {
       <table className={styles.checkerboard}>
         <tbody>{renderTable()}</tbody>
       </table>
+
+      {/* Подключение CheckersBoardDebug */}
+      <CheckersBoardDebug
+        state={{
+          playerId,
+          side,
+          gameId,
+          dark,
+          light,
+          isOpponentTurn,
+          possibleMoves,
+          // moveData,
+        }}
+      />
     </div>
   );
 };
