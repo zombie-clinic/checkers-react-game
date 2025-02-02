@@ -6,14 +6,16 @@ import styles from './StartPage.module.css';
 function StartPage() {
   const [gameStarted, setGameStarted] = useState(false);
   const [gameId, setGameId] = useState(null); // Track the game ID
-  const [playerId] = useState(1); // Example: hardcoded player ID, can be made dynamic
+  const [inputGameId, setInputGameId] = useState('');
+  const [playerId] = useState(); // Example: hardcoded player ID, can be made dynamic
 
   const handleStartGame = async () => {
     try {
-      const newGameData = await startNewLobby(playerId, 'LIGHT');
+      const newGameData = await startNewLobby(1, 'LIGHT'); //playerId = 1 by default
       if (newGameData && newGameData.gameId) {
         setGameId(newGameData.gameId); // Save gameId from response
-        console.log('New Game Started:', newGameData.gameId);
+        // localStorage.setItem('gameId', gameId); // Сохранить gameId (TEST)
+        console.log('New Game Started:', gameId);
         setGameStarted(true);
       } else {
         console.error('Invalid response:', newGameData);
@@ -25,12 +27,14 @@ function StartPage() {
 
   const handleJoinGame = async () => {
     try {
-      if (!gameId) {
-        alert('You must start a game first or provide a valid gameId!');
+      const storedGameId = inputGameId || gameId;
+      if (!storedGameId) {
+        alert('You must enter a game ID!');
         return;
       }
-      const joinGameResponse = await joinGame(gameId, playerId);
+      const joinGameResponse = await joinGame(storedGameId, 2); //playerId = 2 by default
       console.log('Joined Game:', joinGameResponse);
+      setGameId(storedGameId); // Сохраняем gameId в state на случай, если было взято из localStorage
       setGameStarted(true); // Redirect to game board after joining
     } catch (error) {
       console.error('Error joining game:', error);
@@ -51,7 +55,15 @@ function StartPage() {
       <h1>Checkers Game</h1>
       <div className={styles.buttonWrap}>
         <button onClick={handleStartGame}>Start New Game</button>
-        <button onClick={handleJoinGame}>Join Game</button>
+        <div className={styles.joinGameContainer}>
+          <input
+            type="text"
+            placeholder="Enter game ID"
+            value={inputGameId}
+            onChange={e => setInputGameId(e.target.value)}
+          />
+          <button onClick={handleJoinGame}>Join Game</button>
+        </div>
         <button onClick={handleContinueGame}>Continue Game</button>
       </div>
     </div>

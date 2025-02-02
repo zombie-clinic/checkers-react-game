@@ -1,4 +1,10 @@
-.buttonWrap{
-    display: flex;
-    flex-direction: column;
+.buttonWrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.joinGameContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }

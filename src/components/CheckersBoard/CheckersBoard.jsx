@@ -1,35 +1,82 @@
 import { useState, useEffect } from 'react';
-import { startNewLobby } from '../../api/CheckersApi.js';
+import {
+  // startNewLobby,
+  submitMove,
+  getCheckersPositions,
+} from '../../api/CheckersApi.js';
 import CheckersBoardDebug from '../CheckersBoardDebug/CheckersBoardDebug.jsx';
 // import StartForm from ../StartForm/StartForm.jsx
-import { getCheckersPositions } from '../../api/CheckersApi.js';
 import { isArraysEqual } from '../../utils/isArraysEqual.js';
 import { getCellColor } from '../../utils/getCellColor.js';
 import styles from './CheckersBoard.module.css';
 import checkerData from '../../data/newgame.json';
-// let gameId = '0a83d555-abfe-42f9-8d46-0d23d7a1d863';
 
-const CheckerBoard = () => {
+const CheckerBoard = ({ gameId }) => {
   const [playerId, setPlayerId] = useState(1); //on gameStart
   const [side, setSide] = useState('LIGHT'); //on gameStart
-  const [testGameId, setTestGameId] = useState(''); //on gameStart
-  const [gameId, setGameId] = useState('0a83d555-abfe-42f9-8d46-0d23d7a1d863'); //on gameStart
+  // const [currentGameId, setCurrentGameId] = useState(gameId); //on gameStart
   const [dark, setDark] = useState(checkerData.dark);
   const [light, setLight] = useState(checkerData.light);
-  const [isOpponentTurn, setIsOpponentTurn] = useState(true); // opponent's turn is default
-  const [possibleMoves, setpossibleMoves] = useState([]); //
+  const [isOpponentTurn, setIsOpponentTurn] = useState(false); // opponent's turn is default
+  const [possibleMoves, setPossibleMoves] = useState([]); //
   const [startMoveCell, setStartMoveCell] = useState(null); // Начальная клетка
   const [endMoveCell, setEndMoveCell] = useState(null); // Конечная клетка
   const [highlightedCell, setHighlightedCell] = useState(null); // Подсвеченная ячейка
   const [moveData, setMoveData] = useState(null); // Состояние для moveData только для CheckersBoardDebug!
 
+  // Функция для обновления состояния доски
+  const updateBoardState = async () => {
+    try {
+      const data = await getCheckersPositions(gameId);
+      if (
+        !isArraysEqual(data.state.dark, dark) ||
+        !isArraysEqual(data.state.light, light)
+      ) {
+        setDark(data.state.dark);
+        setLight(data.state.light);
+        setPossibleMoves(data.possibleMoves);
+        setIsOpponentTurn(data.isOpponentTurn);
+      }
+    } catch (error) {
+      console.error('Error updating board state:', error);
+    }
+  };
+
   // Function to start a new game and set gameId and side
   const initializeNewGame = async () => {
-    const newGameData = await startNewLobby(1, 'LIGHT');
-    // setTestGameId(newGameData.gameId); // REMOVE IT after tests
-    setSide(newGameData.side);
-    console.log(newGameData.gameId);
+    // const newGameData = await startNewLobby(playerId, side);
+    setSide(side);
+    // console.log(newGameData.gameId);
   };
+
+  useEffect(() => {
+    // Создаем начальные ходы один раз при загрузке компонента
+    const initializePossibleMoves = () => {
+      if (side === 'LIGHT') {
+        setPossibleMoves([
+          '21-17',
+          // '22-17',
+          // '22-18',
+          // '23-18',
+          // '23-19',
+          // '24-19',
+          // '24-20',
+        ]);
+      } else if (side === 'DARK') {
+        setPossibleMoves([
+          '12-16',
+          '11-16',
+          '11-15',
+          '10-15',
+          '10-14',
+          '9-14',
+          '9-13',
+        ]);
+      }
+    };
+
+    initializePossibleMoves(); // Вызываем функцию инициализации
+  }, [side]); // Выполняется один раз после загрузки или изменения side
 
   useEffect(() => {
     // Run the startNewLobby function when the component is loaded
@@ -37,26 +84,9 @@ const CheckerBoard = () => {
   }, []);
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const data = await getCheckersPositions(gameId);
-        if (
-          !isArraysEqual(data.state.dark, dark) ||
-          !isArraysEqual(data.state.light, light)
-        ) {
-          setDark(data.state.dark);
-          setLight(data.state.light);
-          setIsOpponentTurn(false); // Update the state variable
-          setpossibleMoves(data.possibleMoves);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    }
-
     const fetchDataInterval = setInterval(() => {
       if (isOpponentTurn) {
-        fetchData();
+        updateBoardState();
       }
     }, 1000); // 1 time per second
 
@@ -65,7 +95,7 @@ const CheckerBoard = () => {
     };
   }, [gameId, isOpponentTurn, dark, light]); // Add dataFetched to the dependency array
 
-  const handleCellClick = cellNumber => {
+  const handleCellClick = async cellNumber => {
     if (startMoveCell === null) {
       // Проверяем, принадлежит ли шашка текущей стороне
       const playerCheckers = side === 'LIGHT' ? light : dark;
@@ -90,10 +120,17 @@ const CheckerBoard = () => {
         };
         setMoveData(newMoveData); // Обновляем состояние moveData
         console.log('Move data:', newMoveData);
-        // Отправить данные хода на сервер (добавить)
-        // reset состояния после успешного хода
-        setStartMoveCell(null);
-        setHighlightedCell(null);
+        try {
+          // Отправить данные хода на сервер
+          await submitMove(gameId, newMoveData);
+          console.log('Move successfully submitted:', newMoveData);
+          // Reset состояния после успешного хода
+          setStartMoveCell(null);
+          setHighlightedCell(null);
+          updateBoardState();
+        } catch (error) {
+          console.error('Failed to submit move:', error);
+        }
       } else {
         // Невалидный ход
         setStartMoveCell(null);
@@ -101,8 +138,6 @@ const CheckerBoard = () => {
       }
     }
   };
-
-  console.log(testGameId);
 
   // Генерация доски
   const renderTable = () => {
@@ -160,8 +195,8 @@ const CheckerBoard = () => {
           light,
           isOpponentTurn,
           possibleMoves,
-          // moveData,
         }}
+        moveData={moveData}
       />
     </div>
   );

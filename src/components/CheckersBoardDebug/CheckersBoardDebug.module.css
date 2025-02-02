@@ -1,24 +1,26 @@
-.debugState {
+.debugContainer {
   margin-top: 20px;
-  padding: 10px;
-  border-top: 2px solid #ccc;
-  background-color: #f9f9f9;
 }
 
-.table {
+.debugTable {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
-}
-
-.table th,
-.table td {
-  border: 1px solid #ddd;
-  padding: 8px;
   text-align: left;
+  border-collapse: collapse;
 }
 
-.table th {
+.debugTable th,
+.debugTable td {
+  border: 1px solid #ddd;
+  padding: 4px;
+}
+
+.debugTable th {
   background-color: #f2f2f2;
   font-weight: bold;
+}
+
+.noDataMessage {
+  color: #666;
+  font-style: italic;
+  margin-top: 8px;
 }

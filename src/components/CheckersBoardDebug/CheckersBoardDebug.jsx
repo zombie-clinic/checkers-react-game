@@ -1,12 +1,14 @@
-import React from 'react';
+// import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './CheckersBoardDebug.module.css';
 
-function CheckersBoardDebug({ state }) {
+function CheckersBoardDebug({ state, moveData }) {
   return (
-    <div style={{ marginTop: '20px' }}>
+    <div className={styles.debugContainer}>
       <h3>Debug State</h3>
-      <table border="1" style={{ width: '100%', textAlign: 'left' }}>
+
+      {/* Таблица состояния */}
+      <table className={styles.debugTable}>
         <thead>
           <tr>
             <th>Key</th>
@@ -17,7 +19,6 @@ function CheckersBoardDebug({ state }) {
           {Object.entries(state).map(([key, value]) => (
             <tr key={key}>
               <td>{key}</td>
-              {/* Проверяем, является ли value объектом, массивом или другим типом */}
               <td>
                 {value !== undefined
                   ? typeof value === 'object'
@@ -29,12 +30,46 @@ function CheckersBoardDebug({ state }) {
           ))}
         </tbody>
       </table>
+
+      {/* Таблица moveData */}
+      <h3>Move Data</h3>
+      <table className={styles.debugTable}>
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          {moveData ? (
+            Object.entries(moveData).map(([key, value]) => (
+              <tr key={key}>
+                <td>{key}</td>
+                <td>
+                  {value !== undefined
+                    ? typeof value === 'object'
+                      ? JSON.stringify(value)
+                      : value.toString()
+                    : 'undefined'}
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="2" className={styles.noDataMessage}>
+                No move data available
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     </div>
   );
 }
 
 CheckersBoardDebug.propTypes = {
   state: PropTypes.object.isRequired,
+  moveData: PropTypes.object, // moveData может быть объектом или null
 };
 
 export default CheckersBoardDebug;
