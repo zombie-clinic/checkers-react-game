@@ -11,9 +11,9 @@ import { getCellColor } from '../../utils/getCellColor.js';
 import styles from './CheckersBoard.module.css';
 import checkerData from '../../data/newgame.json';
 
-const CheckerBoard = ({ gameId }) => {
-  const [playerId, setPlayerId] = useState(1); //on gameStart
-  const [side, setSide] = useState('LIGHT'); //on gameStart
+const CheckerBoard = ({ gameId, side, playerId }) => {
+  // const [playerId, setPlayerId] = useState(); //on gameStart
+  // const [side, setSide] = useState('LIGHT'); //on gameStart
   // const [currentGameId, setCurrentGameId] = useState(gameId); //on gameStart
   const [dark, setDark] = useState(checkerData.dark);
   const [light, setLight] = useState(checkerData.light);
@@ -35,18 +35,21 @@ const CheckerBoard = ({ gameId }) => {
         setDark(data.state.dark);
         setLight(data.state.light);
         setPossibleMoves(data.possibleMoves);
-        setIsOpponentTurn(data.isOpponentTurn);
+
+        // // Определение possibleMoveSide на основе possibleMoves
+        const possibleMoveSide = Object.values(data.possibleMoves)?.[0]?.[0]
+          ?.side;
+
+        // Переключение значения isOpponentTurn
+        if (side === possibleMoveSide) {
+          setIsOpponentTurn(false);
+        } else {
+          setIsOpponentTurn(true);
+        }
       }
     } catch (error) {
       console.error('Error updating board state:', error);
     }
-  };
-
-  // Function to start a new game and set gameId and side
-  const initializeNewGame = async () => {
-    // const newGameData = await startNewLobby(playerId, side);
-    setSide(side);
-    // console.log(newGameData.gameId);
   };
 
   useEffect(() => {
@@ -63,25 +66,12 @@ const CheckerBoard = ({ gameId }) => {
           // '24-20',
         ]);
       } else if (side === 'DARK') {
-        setPossibleMoves([
-          '12-16',
-          '11-16',
-          '11-15',
-          '10-15',
-          '10-14',
-          '9-14',
-          '9-13',
-        ]);
+        updateBoardState();
       }
     };
 
     initializePossibleMoves(); // Вызываем функцию инициализации
   }, [side]); // Выполняется один раз после загрузки или изменения side
-
-  useEffect(() => {
-    // Run the startNewLobby function when the component is loaded
-    initializeNewGame();
-  }, []);
 
   useEffect(() => {
     const fetchDataInterval = setInterval(() => {
@@ -141,13 +131,19 @@ const CheckerBoard = ({ gameId }) => {
 
   // Генерация доски
   const renderTable = () => {
-    let blackCellCounter = 0;
+    let blackCellCounter = side === 'LIGHT' ? 0 : 33;
     return Array.from({ length: 8 }, (_, row) => (
       <tr key={row}>
         {Array.from({ length: 8 }, (_, col) => {
           const cellColor = getCellColor(row, col);
           const isBlackCell = cellColor === 'black';
-          const cellNumber = isBlackCell ? ++blackCellCounter : null;
+          let cellNumber;
+          if (side === 'LIGHT') {
+            cellNumber = isBlackCell ? ++blackCellCounter : null;
+          } else {
+            cellNumber = isBlackCell ? --blackCellCounter : null;
+          }
+
           const isHighlighted = cellNumber === highlightedCell;
 
           const cellText =

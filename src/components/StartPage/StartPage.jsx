@@ -7,15 +7,16 @@ function StartPage() {
   const [gameStarted, setGameStarted] = useState(false);
   const [gameId, setGameId] = useState(null); // Track the game ID
   const [inputGameId, setInputGameId] = useState('');
-  const [playerId] = useState(); // Example: hardcoded player ID, can be made dynamic
+  const [side, setSide] = useState('');
+  const [playerId, setPlayerId] = useState(); // Example: hardcoded player ID, can be made dynamic
 
   const handleStartGame = async () => {
     try {
       const newGameData = await startNewLobby(1, 'LIGHT'); //playerId = 1 by default
       if (newGameData && newGameData.gameId) {
         setGameId(newGameData.gameId); // Save gameId from response
-        // localStorage.setItem('gameId', gameId); // Сохранить gameId (TEST)
-        console.log('New Game Started:', gameId);
+        setSide('LIGHT');
+        setPlayerId(1);
         setGameStarted(true);
       } else {
         console.error('Invalid response:', newGameData);
@@ -32,10 +33,12 @@ function StartPage() {
         alert('You must enter a game ID!');
         return;
       }
+      setGameId(storedGameId);
       const joinGameResponse = await joinGame(storedGameId, 2); //playerId = 2 by default
+      setSide('DARK');
+      setPlayerId(2);
+      setGameStarted(true);
       console.log('Joined Game:', joinGameResponse);
-      setGameId(storedGameId); // Сохраняем gameId в state на случай, если было взято из localStorage
-      setGameStarted(true); // Redirect to game board after joining
     } catch (error) {
       console.error('Error joining game:', error);
     }
@@ -47,7 +50,7 @@ function StartPage() {
   };
 
   if (gameStarted) {
-    return <CheckersBoard gameId={gameId} />;
+    return <CheckersBoard gameId={gameId} side={side} playerId={playerId} />;
   }
 
   return (
