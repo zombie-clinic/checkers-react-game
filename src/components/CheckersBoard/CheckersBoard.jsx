@@ -13,7 +13,7 @@ import checkerData from '../../data/newgame.json';
 
 const CheckerBoard = ({ gameId, side, playerId }) => {
   // const [playerId, setPlayerId] = useState(); //on gameStart
-  // const [side, setSide] = useState('LIGHT'); //on gameStart
+  const [side, setSide] = useState('LIGHT'); //on gameStart
   // const [currentGameId, setCurrentGameId] = useState(gameId); //on gameStart
   const [dark, setDark] = useState(checkerData.dark);
   const [light, setLight] = useState(checkerData.light);
@@ -35,13 +35,10 @@ const CheckerBoard = ({ gameId, side, playerId }) => {
         setDark(data.state.dark);
         setLight(data.state.light);
         setPossibleMoves(data.possibleMoves);
-
-        // // Определение possibleMoveSide на основе possibleMoves
-        const possibleMoveSide = Object.values(data.possibleMoves)?.[0]?.[0]
-          ?.side;
+        setSide(data.side); // Set the side from backend response
 
         // Переключение значения isOpponentTurn
-        if (side === possibleMoveSide) {
+        if (side === data.side) {
           setIsOpponentTurn(false);
         } else {
           setIsOpponentTurn(true);
