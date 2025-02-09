@@ -9,7 +9,8 @@ import CheckersBoardDebug from '../CheckersBoardDebug/CheckersBoardDebug.jsx';
 import { isArraysEqual } from '../../utils/isArraysEqual.js';
 import { getCellColor } from '../../utils/getCellColor.js';
 import styles from './CheckersBoard.module.css';
-import checkerData from '../../data/newgame.json';
+import checkerData from '../../data/newgame.json'; // переписать, чтобы брать из InitialBoardState.json
+import InitialBoardState from '../../data/InitialBoardState.json';
 
 const CheckerBoard = ({ gameId, side, playerId }) => {
   // const [playerId, setPlayerId] = useState(); //on gameStart
@@ -20,9 +21,18 @@ const CheckerBoard = ({ gameId, side, playerId }) => {
   const [isOpponentTurn, setIsOpponentTurn] = useState(false); // opponent's turn is default
   const [possibleMoves, setPossibleMoves] = useState([]); //
   const [startMoveCell, setStartMoveCell] = useState(null); // Начальная клетка
-  const [endMoveCell, setEndMoveCell] = useState(null); // Конечная клетка
+  // const [endMoveCell, setEndMoveCell] = useState(null); // Конечная клетка
   const [highlightedCell, setHighlightedCell] = useState(null); // Подсвеченная ячейка
   const [moveData, setMoveData] = useState(null); // Состояние для moveData только для CheckersBoardDebug!
+
+  // Преобразуем possibleMoves в массив строк и устанавливаем state
+  const formatAndSetPossibleMoves = possibleMoves => {
+    const formattedMoves = Object.entries(possibleMoves).flatMap(
+      ([position, moves]) =>
+        moves.map(move => `${position}-${move.destination}`)
+    );
+    setPossibleMoves(formattedMoves);
+  };
 
   // Функция для обновления состояния доски
   const updateBoardState = async () => {
@@ -34,18 +44,10 @@ const CheckerBoard = ({ gameId, side, playerId }) => {
       ) {
         setDark(data.state.dark);
         setLight(data.state.light);
-        setPossibleMoves(data.possibleMoves);
 
-        // // Определение possibleMoveSide на основе possibleMoves
-        const possibleMoveSide = Object.values(data.possibleMoves)?.[0]?.[0]
-          ?.side;
+        formatAndSetPossibleMoves(data.possibleMoves);
 
-        // Переключение значения isOpponentTurn
-        if (side === possibleMoveSide) {
-          setIsOpponentTurn(false);
-        } else {
-          setIsOpponentTurn(true);
-        }
+        setIsOpponentTurn(side !== data.side);
       }
     } catch (error) {
       console.error('Error updating board state:', error);
@@ -56,22 +58,15 @@ const CheckerBoard = ({ gameId, side, playerId }) => {
     // Создаем начальные ходы один раз при загрузке компонента
     const initializePossibleMoves = () => {
       if (side === 'LIGHT') {
-        setPossibleMoves([
-          '21-17',
-          // '22-17',
-          // '22-18',
-          // '23-18',
-          // '23-19',
-          // '24-19',
-          // '24-20',
-        ]);
+        // Получаем список ходов из InitialBoardState
+        formatAndSetPossibleMoves(InitialBoardState.possibleMoves);
       } else if (side === 'DARK') {
         updateBoardState();
       }
     };
 
     initializePossibleMoves(); // Вызываем функцию инициализации
-  }, [side]); // Выполняется один раз после загрузки или изменения side
+  }, []); // Выполняется один раз после загрузки
 
   useEffect(() => {
     const fetchDataInterval = setInterval(() => {
@@ -95,7 +90,7 @@ const CheckerBoard = ({ gameId, side, playerId }) => {
       }
     } else {
       // Устанавливаем конечную ячейку
-      setEndMoveCell(cellNumber);
+      // setEndMoveCell(cellNumber);
       const move = `${startMoveCell}-${cellNumber}`;
       if (possibleMoves.includes(move)) {
         // Валидный ход
