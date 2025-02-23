@@ -9,7 +9,7 @@
       {
         "position": 21,
         "destination": 17,
-        "isCapture": true,
+        "isCapture": false,
         "isTerminal": true
       }
     ],
@@ -17,13 +17,13 @@
       {
         "position": 22,
         "destination": 17,
-        "isCapture": true,
+        "isCapture": false,
         "isTerminal": true
       },
       {
         "position": 22,
         "destination": 18,
-        "isCapture": true,
+        "isCapture": false,
         "isTerminal": true
       }
     ],
@@ -31,13 +31,13 @@
       {
         "position": 23,
         "destination": 18,
-        "isCapture": true,
+        "isCapture": false,
         "isTerminal": true
       },
       {
         "position": 23,
         "destination": 19,
-        "isCapture": true,
+        "isCapture": false,
         "isTerminal": true
       }
     ],
@@ -45,13 +45,13 @@
       {
         "position": 24,
         "destination": 19,
-        "isCapture": true,
+        "isCapture": false,
         "isTerminal": true
       },
       {
         "position": 24,
         "destination": 20,
-        "isCapture": true,
+        "isCapture": false,
         "isTerminal": true
       }
     ]

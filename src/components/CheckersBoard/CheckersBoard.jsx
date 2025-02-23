@@ -17,7 +17,6 @@ const CheckerBoard = ({ gameId, side, playerId }) => {
   const [possibleMoves, setPossibleMoves] = useState([]); // move strings [1-2, 2-3, ...]
   const [fullPossibleMoves, setFullPossibleMoves] = useState([]); // full moves object
   const [startMoveCell, setStartMoveCell] = useState(null); // Начальная клетка
-  // const [endMoveCell, setEndMoveCell] = useState(null); // Конечная клетка
   const [highlightedCell, setHighlightedCell] = useState(null); // Подсвеченная ячейка
   const [moveData, setMoveData] = useState(null); // Состояние для moveData только для CheckersBoardDebug!
 
@@ -60,6 +59,7 @@ const CheckerBoard = ({ gameId, side, playerId }) => {
       if (side === 'LIGHT') {
         // Получаем список ходов из InitialBoardState
         formatAndSetPossibleMoves(InitialBoardState.possibleMoves);
+        setFullPossibleMoves(InitialBoardState.possibleMoves);
       } else if (side === 'DARK') {
         updateBoardState();
         setIsOpponentTurn(true);
@@ -91,9 +91,6 @@ const CheckerBoard = ({ gameId, side, playerId }) => {
         setHighlightedCell(cellNumber); // Подсветка ячейки
       }
     } else {
-      // Устанавливаем конечную ячейку
-      // setEndMoveCell(cellNumber);
-
       // Получаем возможные ходы из fullPossibleMoves
       const moveOptions = fullPossibleMoves[startMoveCell] || [];
       const selectedMove = moveOptions.find(m => m.destination === cellNumber);
@@ -199,24 +196,27 @@ const CheckerBoard = ({ gameId, side, playerId }) => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <table className={styles.checkerboard}>
         <tbody>{renderTable()}</tbody>
       </table>
 
       {/* Подключение CheckersBoardDebug */}
-      <CheckersBoardDebug
-        state={{
-          playerId,
-          side,
-          gameId,
-          dark: darkPositions,
-          light: lightPositions,
-          isOpponentTurn,
-          possibleMoves,
-        }}
-        moveData={moveData}
-      />
+      <div className={styles.debug}>
+        <CheckersBoardDebug
+          state={{
+            playerId,
+            side,
+            gameId,
+            dark: darkPositions,
+            light: lightPositions,
+            isOpponentTurn,
+            possibleMoves,
+            fullPossibleMoves,
+          }}
+          moveData={moveData}
+        />
+      </div>
     </div>
   );
 };
