@@ -9,7 +9,7 @@ import InitialBoardState from '../../data/InitialBoardState.json';
 
 const CheckerBoard = ({ gameId, side, playerId }) => {
   // const [playerId, setPlayerId] = useState(); //on gameStart
-  // const [side, setSide] = useState('LIGHT'); //on gameStart
+  const [playerSide, setPlayerSide] = useState(side); //on gameStart
   // const [currentGameId, setCurrentGameId] = useState(gameId); //on gameStart
   const [darkPositions, setDarkPositions] = useState(checkerData.dark);
   const [lightPositions, setLightPositions] = useState(checkerData.light);
@@ -102,20 +102,6 @@ const CheckerBoard = ({ gameId, side, playerId }) => {
           ? `${startMoveCell}x${cellNumber}`
           : `${startMoveCell}-${cellNumber}`;
 
-        // const move = `${startMoveCell}-${cellNumber}`;
-        // if (possibleMoves.includes(move)) {
-        // // Получаем данные о возможных ходах для startMoveCell
-        // const moveOptions =
-        //   InitialBoardState.possibleMoves[startMoveCell] || [];
-        // const selectedMove = moveOptions.find(
-        //   m => m.destination === cellNumber
-        // );
-        // let capturedCheckers = [];
-        // if (selectedMove && selectedMove.isCapture) {
-        //   // Вычисляем клетку, где стоит шашка противника
-        //   const capturedCell = Math.floor((startMoveCell + cellNumber) / 2);
-        //   capturedCheckers.push(capturedCell);
-        // }
         // Валидный ход
         const newMoveData = {
           side,

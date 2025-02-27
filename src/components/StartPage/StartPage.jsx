@@ -1,25 +1,28 @@
 import { useState } from 'react';
-import CheckersBoard from '../CheckersBoard/CheckersBoard';
+import { useNavigate } from 'react-router-dom'; // импортируем для навигации
 import { startNewLobby, joinGame } from '../../api/CheckersApi';
 import styles from './StartPage.module.css';
 
 function StartPage() {
-  const [gameStarted, setGameStarted] = useState(false);
-  const [gameId, setGameId] = useState(null); // Track the game ID
+  const [gameId, setGameId] = useState(null);
   const [inputGameId, setInputGameId] = useState('');
-  const [side, setSide] = useState('');
-  const [playerId, setPlayerId] = useState(); // Example: hardcoded player ID, can be made dynamic
+  // const [gameStarted, setGameStarted] = useState(false);
+  // const [side, setSide] = useState('');
+  // const [playerId, setPlayerId] = useState();
+  const navigate = useNavigate(); // Используем навигацию
 
   const handleStartGame = async () => {
     try {
-      const newGameData = await startNewLobby(1, 'LIGHT'); //playerId = 1 by default
-      if (newGameData && newGameData.gameId) {
-        setGameId(newGameData.gameId); // Save gameId from response
-        setSide('LIGHT');
-        setPlayerId(1);
-        setGameStarted(true);
-      } else {
-        console.error('Invalid response:', newGameData);
+      const newGameData = await startNewLobby(1, 'LIGHT');
+      if (newGameData?.gameId) {
+        setGameId(newGameData.gameId);
+        // setSide('LIGHT');
+        // setPlayerId(1);
+        // setGameStarted(true);
+
+        navigate(`/game/${newGameData.gameId}`, {
+          state: { side: 'LIGHT', playerId: 1 },
+        });
       }
     } catch (error) {
       console.error('Error starting a new game:', error);
@@ -34,27 +37,20 @@ function StartPage() {
         return;
       }
       setGameId(storedGameId);
-      const joinGameResponse = await joinGame(storedGameId, 2); //playerId = 2 by default
-      setSide('DARK');
-      setPlayerId(2);
-      setGameStarted(true);
-      console.log('Joined Game:', joinGameResponse);
+      // setSide('DARK');
+      // setPlayerId(2);
+      // setGameStarted(true);
+
+      navigate(`/game/${storedGameId}`, {
+        state: { side: 'DARK', playerId: 2 },
+      });
     } catch (error) {
       console.error('Error joining game:', error);
     }
   };
 
-  const handleContinueGame = () => {
-    console.log('Continuing game...');
-    // Add logic to fetch saved game and navigate to it
-  };
-
-  if (gameStarted) {
-    return <CheckersBoard gameId={gameId} side={side} playerId={playerId} />;
-  }
-
   return (
-    <div>
+    <>
       <h1>Checkers Game</h1>
       <div className={styles.buttonWrap}>
         <button onClick={handleStartGame}>Start New Game</button>
@@ -67,9 +63,8 @@ function StartPage() {
           />
           <button onClick={handleJoinGame}>Join Game</button>
         </div>
-        <button onClick={handleContinueGame}>Continue Game</button>
       </div>
-    </div>
+    </>
   );
 }
 
