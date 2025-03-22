@@ -3,9 +3,11 @@
 }
 
 .debugTable {
-  width: 100%;
+  min-width: 35%;
+  max-width: 40%;
   text-align: left;
   border-collapse: collapse;
+  font-size: 12px;
 }
 
 .debugTable th,

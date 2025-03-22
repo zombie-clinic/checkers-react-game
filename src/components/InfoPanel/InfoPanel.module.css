@@ -1,0 +1,25 @@
+.turnIndicator {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.yourTurn {
+  color: rgb(0, 110, 0);
+}
+
+.opponentTurn {
+  color: #800000; /* Бордовый цвет */
+}
+
+.pieceStats {
+  font-size: 16px;
+  text-align: center;
+  margin-top: 4px;
+}
+
+.pieceIcon {
+  font-size: 20px;
+  margin: 0 4px;
+}

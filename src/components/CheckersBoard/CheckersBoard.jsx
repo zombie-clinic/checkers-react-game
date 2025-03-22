@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { submitMove, getCheckersPositions } from '../../api/CheckersApi.js';
 import CheckersBoardDebug from '../CheckersBoardDebug/CheckersBoardDebug.jsx';
+import InfoPanel from '../InfoPanel/InfoPanel.jsx';
 import { isArraysEqual } from '../../utils/isArraysEqual.js';
 import { getCellColor } from '../../utils/getCellColor.js';
 import styles from './CheckersBoard.module.css';
@@ -9,12 +10,13 @@ import InitialBoardState from '../../data/InitialBoardState.json';
 
 const CheckerBoard = ({ gameId, side, playerId }) => {
   // const [playerId, setPlayerId] = useState(); //on gameStart
-  const [playerSide, setPlayerSide] = useState(side); //on gameStart
+  // const [playerSide, setPlayerSide] = useState(side); //on gameStart
   // const [currentGameId, setCurrentGameId] = useState(gameId); //on gameStart
   const [darkPositions, setDarkPositions] = useState(checkerData.dark);
   const [lightPositions, setLightPositions] = useState(checkerData.light);
   const [isOpponentTurn, setIsOpponentTurn] = useState(false); // opponent's turn is default
   const [possibleMoves, setPossibleMoves] = useState([]); // move strings [1-2, 2-3, ...]
+  const [sideToMove, setSideToMove] = useState();
   const [fullPossibleMoves, setFullPossibleMoves] = useState([]); // full moves object
   const [startMoveCell, setStartMoveCell] = useState(null); // Начальная клетка
   const [highlightedCell, setHighlightedCell] = useState(null); // Подсвеченная ячейка
@@ -46,6 +48,7 @@ const CheckerBoard = ({ gameId, side, playerId }) => {
         // console.log('Server response side:', data.side);
         // console.log('Current player side:', side);
         setIsOpponentTurn(side !== data.side);
+        setSideToMove(data.side);
         return data; //REMOVE THIS AFTER TEST
       }
     } catch (error) {
@@ -62,7 +65,7 @@ const CheckerBoard = ({ gameId, side, playerId }) => {
         setFullPossibleMoves(InitialBoardState.possibleMoves);
       } else if (side === 'DARK') {
         updateBoardState();
-        setIsOpponentTurn(true);
+        setIsOpponentTurn(true); // setting 2nd turn for 'DARK'-side player
       }
     };
 
@@ -75,7 +78,7 @@ const CheckerBoard = ({ gameId, side, playerId }) => {
       if (isOpponentTurn) {
         updateBoardState();
       }
-    }, 1000); // 1 time per second
+    }, 7000); // 1 time per second
 
     return () => {
       clearInterval(fetchDataInterval); // Clear the interval when the component unmounts
@@ -183,16 +186,26 @@ const CheckerBoard = ({ gameId, side, playerId }) => {
 
   return (
     <div className={styles.container}>
-      <table className={styles.checkerboard}>
-        <tbody>{renderTable()}</tbody>
-      </table>
-
+      <div className={styles.boardWrapper}>
+        <table className={styles.checkerboard}>
+          <tbody>{renderTable()}</tbody>
+        </table>
+        {/* Подключение InfoPanel */}
+        <div className={styles.infopanel}>
+          <InfoPanel
+            isOpponentTurn={isOpponentTurn}
+            side={side}
+            data={{ state: { dark: darkPositions, light: lightPositions } }}
+          />
+        </div>
+      </div>
       {/* Подключение CheckersBoardDebug */}
       <div className={styles.debug}>
         <CheckersBoardDebug
           state={{
             playerId,
             side,
+            sideToMove,
             gameId,
             dark: darkPositions,
             light: lightPositions,
