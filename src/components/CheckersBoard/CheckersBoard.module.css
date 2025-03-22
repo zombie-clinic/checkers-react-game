@@ -46,13 +46,13 @@
   border: 2px solid black;
   flex-shrink: 0; /* Чтобы доска не сжималась */
 
-  width: min(80vh, 80vw); /* Делаем доску квадратной */
-  height: min(80vh, 80vw);
+  width: min(70vh, 70vw); /* Делаем доску квадратной */
+  height: min(70vh, 70vw);
 }
 
 .cell {
-  width: 50px;
-  height: 50px;
+  width: 12.5%; /* 100% / 8 клеток */
+  height: 12.5%;
   text-align: center;
   vertical-align: middle;
   font-size: 30px;
