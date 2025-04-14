@@ -1,4 +1,4 @@
-export const getGameResultMessage = ({ dark, light }) => {
+const getGameResultMessage = ({ dark, light }) => {
   if (dark.length == 0) {
     return 'WHITE WINS!';
   }
@@ -9,3 +9,5 @@ export const getGameResultMessage = ({ dark, light }) => {
 
   return '';
 };
+
+export default getGameResultMessage;

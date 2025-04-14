@@ -1,6 +1,5 @@
-    
 // export function jsonStringifyUnescaped(data) {
-    
+
 //     const escapedJsonString = JSON.stringify(data, null, 2);
 //     const unescapedJsonObject = JSON.parse(escapedJsonString);
 //     const cleanJsonString = JSON.stringify(unescapedJsonObject, null, 2);
