@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 // const API_KEY = 'PUT IT HERE IF NEEDED';
-const BASE_URL = 'http://localhost:8080';
-// const BASE_URL =
-//   'https://38d4-2a02-2455-81dc-9d00-f797-e8f8-fad3-e95e.ngrok-free.app';
+// const BASE_URL = 'http://localhost:8080';
+const BASE_URL =
+  'https://978f-2a02-2455-81dc-9d00-229c-100a-5f89-ca09.ngrok-free.app';
 
 const instance = axios.create({
   baseURL: BASE_URL,
