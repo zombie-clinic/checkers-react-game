@@ -1,9 +1,7 @@
 import axios from 'axios';
 
 // const API_KEY = 'PUT IT HERE IF NEEDED';
-// const BASE_URL = 'http://localhost:8080';
-const BASE_URL =
-  'https://978f-2a02-2455-81dc-9d00-229c-100a-5f89-ca09.ngrok-free.app';
+const BASE_URL = 'http://localhost:8080';
 
 const instance = axios.create({
   baseURL: BASE_URL,
@@ -17,6 +15,16 @@ export const startNewLobby = async (player, side) => {
   };
   const response = await instance.post('/games', requestData);
   // console.log('Posting a new game:', response.data);
+  return response.data;
+};
+
+export const startImportedGame = async (player, side, state) => {
+  const requestData = {
+    playerId: player,
+    side: side,
+    state: state
+  };
+  const response = await instance.post('/import', requestData);
   return response.data;
 };
 
