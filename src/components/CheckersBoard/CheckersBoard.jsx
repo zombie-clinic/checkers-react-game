@@ -198,6 +198,7 @@ const CheckerBoard = ({ gameId, side, playerId, startingState }) => {
             isOpponentTurn={isOpponentTurn}
             side={side}
             data={{ state: { dark: darkPositions, light: lightPositions } }}
+            possibleMoves={possibleMoves}
           />
         </div>
       </div>
@@ -223,3 +224,12 @@ const CheckerBoard = ({ gameId, side, playerId, startingState }) => {
 };
 
 export default CheckerBoard;
+
+{
+  /* <InfoPanel
+  isOpponentTurn={isOpponentTurn}
+  side={side}
+  data={{ state: { dark: darkPositions, light: lightPositions } }}
+  possibleMoves={possibleMoves}
+/>; */
+}

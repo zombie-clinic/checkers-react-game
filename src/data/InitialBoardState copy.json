@@ -1,0 +1,59 @@
+{
+  "state": {
+    "dark": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+    "light": [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
+  },
+  "side": "LIGHT",
+  "possibleMoves": {
+    "21": [
+      {
+        "position": 21,
+        "destination": 17,
+        "isCapture": false,
+        "isTerminal": true
+      }
+    ],
+    "22": [
+      {
+        "position": 22,
+        "destination": 17,
+        "isCapture": false,
+        "isTerminal": true
+      },
+      {
+        "position": 22,
+        "destination": 18,
+        "isCapture": false,
+        "isTerminal": true
+      }
+    ],
+    "23": [
+      {
+        "position": 23,
+        "destination": 18,
+        "isCapture": false,
+        "isTerminal": true
+      },
+      {
+        "position": 23,
+        "destination": 19,
+        "isCapture": false,
+        "isTerminal": true
+      }
+    ],
+    "24": [
+      {
+        "position": 24,
+        "destination": 19,
+        "isCapture": false,
+        "isTerminal": true
+      },
+      {
+        "position": 24,
+        "destination": 20,
+        "isCapture": false,
+        "isTerminal": true
+      }
+    ]
+  }
+}
