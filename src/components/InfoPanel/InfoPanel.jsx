@@ -29,7 +29,7 @@ const InfoPanel = ({ isOpponentTurn, side, data }) => {
         Pieces lost - Your: {side === 'DARK' ? '⚫' : '⚪'} x {yourLostPieces}
         &nbsp; Opponent: {side === 'DARK' ? '⚪' : '⚫'} x {opponentLostPieces}
       </p>
-      <p>{getGameResultMessage}</p>
+      {/* <p>{getGameResultMessage}</p> */}
     </div>
   );
 };

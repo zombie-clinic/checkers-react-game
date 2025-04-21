@@ -15,8 +15,9 @@ function StartPage() {
       if (newGameData?.gameId) {
         setGameId(newGameData.gameId);
 
+        const startingState = newGameData.startingState || '';
         navigate(`/game/${newGameData.gameId}`, {
-          state: { side: 'LIGHT', playerId: 1 },
+          state: { side: 'LIGHT', playerId: 1, startingState },
         });
       }
     } catch (error) {
@@ -26,13 +27,17 @@ function StartPage() {
 
   const handleImportGame = async () => {
     try {
-      const state = JSON.parse(importGameState);
+      const state = JSON.parse('{"dark":[1,2],"light":[21,17]}');
+      // const state = JSON.parse(importGameState);
       const newGameData = await startImportedGame(1, 'LIGHT', state);
       if (newGameData?.gameId) {
         setGameId(newGameData.gameId);
-        
+
+        // todo what would be the default starting state (instead of empty string)
+        // see also the same method in handleStartGame
+        const startingState = newGameData.startingState || '';
         navigate(`/game/${newGameData.gameId}`, {
-          state: { side: 'LIGHT', playerId: 1 },
+          state: { side: 'LIGHT', playerId: 1, startingState },
         });
       }
     } catch (error) {
@@ -42,15 +47,21 @@ function StartPage() {
 
   const handleJoinGame = async () => {
     try {
-      const storedGameId = inputGameId || gameId;
+      const storedGameId = inputGameId || gameId;      
+      
       if (!storedGameId) {
         alert('You must enter a game ID!');
         return;
       }
       setGameId(storedGameId);
 
+
+      const joinGameData = await joinGame(storedGameId, 2);
+
+      const startingState = joinGameData.startingState || '';
+      console.log(`Joining game ${storedGameId} with starting state ${startingState}`);
       navigate(`/game/${storedGameId}`, {
-        state: { side: 'DARK', playerId: 2 },
+        state: { side: 'DARK', playerId: 2, startingState },
       });
     } catch (error) {
       console.error('Error joining game:', error);

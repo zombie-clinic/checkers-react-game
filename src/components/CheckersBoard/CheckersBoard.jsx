@@ -8,12 +8,13 @@ import styles from './CheckersBoard.module.css';
 import checkerData from '../../data/newgame.json'; // переписать, чтобы брать из InitialBoardState.json
 import InitialBoardState from '../../data/InitialBoardState.json';
 
-const CheckerBoard = ({ gameId, side, playerId }) => {
+const CheckerBoard = ({ gameId, side, playerId, startingState }) => {
   // const [playerId, setPlayerId] = useState(); //on gameStart
   // const [playerSide, setPlayerSide] = useState(side); //on gameStart
   // const [currentGameId, setCurrentGameId] = useState(gameId); //on gameStart
-  const [darkPositions, setDarkPositions] = useState(checkerData.dark);
-  const [lightPositions, setLightPositions] = useState(checkerData.light);
+  console.log('CheckerBoard props:', gameId, side, playerId, startingState);
+  const [darkPositions, setDarkPositions] = useState(JSON.parse(startingState).dark);
+  const [lightPositions, setLightPositions] = useState(JSON.parse(startingState).light);
   const [isOpponentTurn, setIsOpponentTurn] = useState(false); // opponent's turn is default
   const [possibleMoves, setPossibleMoves] = useState([]); // move strings [1-2, 2-3, ...]
   const [sideToMove, setSideToMove] = useState();
@@ -21,7 +22,7 @@ const CheckerBoard = ({ gameId, side, playerId }) => {
   const [startMoveCell, setStartMoveCell] = useState(null); // Начальная клетка
   const [highlightedCell, setHighlightedCell] = useState(null); // Подсвеченная ячейка
   const [moveData, setMoveData] = useState(null); // Состояние для moveData только для CheckersBoardDebug!
-
+  
   // Преобразуем possibleMoves в массив строк и устанавливаем state
   const formatAndSetPossibleMoves = possibleMoves => {
     const formattedMoves = Object.entries(possibleMoves).flatMap(
@@ -35,6 +36,7 @@ const CheckerBoard = ({ gameId, side, playerId }) => {
   const updateBoardState = async () => {
     try {
       const data = await getCheckersPositions(gameId);
+      console.log('Server response:', data);
 
       if (
         !isArraysEqual(data.state.dark, darkPositions) ||

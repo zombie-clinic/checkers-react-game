@@ -4,13 +4,15 @@ import CheckersBoard from '../CheckersBoard/CheckersBoard';
 function CheckersBoardWrapper() {
   const { gameId } = useParams();
   const location = useLocation();
-  const { side, playerId } = location.state || {}; // Берём из state, если есть
+  const { side, playerId, startingState } = location.state || {}; // Берём из state, если есть
+
+  console.log('CheckersBoardWrapper props:', gameId, side, playerId, startingState);
 
   if (!side || !playerId) {
     return <div>Error: Missing game data.</div>; // На случай, если зашли напрямую без state
   }
 
-  return <CheckersBoard gameId={gameId} side={side} playerId={playerId} />;
+  return <CheckersBoard gameId={gameId} side={side} playerId={playerId} startingState={startingState} />;
 }
 
 export default CheckersBoardWrapper;

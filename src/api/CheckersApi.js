@@ -24,7 +24,7 @@ export const startImportedGame = async (player, side, state) => {
     side: side,
     state: state
   };
-  const response = await instance.post('/import', requestData);
+  const response = await instance.post('/games?isImport=true', requestData);
   return response.data;
 };
 
