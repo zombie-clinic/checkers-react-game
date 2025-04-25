@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { startNewLobby, joinGame, startImportedGame } from '../../api/CheckersApi';
+import {
+  startNewLobby,
+  joinGame,
+  startImportedGame,
+} from '../../api/CheckersApi';
 import styles from './StartPage.module.css';
 
 function StartPage() {
@@ -16,8 +20,14 @@ function StartPage() {
         setGameId(newGameData.gameId);
 
         const startingState = newGameData.startingState || '';
+        const startingPossibleMoves = newGameData.possibleMoves;
         navigate(`/game/${newGameData.gameId}`, {
-          state: { side: 'LIGHT', playerId: 1, startingState },
+          state: {
+            side: 'LIGHT',
+            playerId: 1,
+            startingState,
+            startingPossibleMoves,
+          },
         });
       }
     } catch (error) {
@@ -36,8 +46,14 @@ function StartPage() {
         // todo what would be the default starting state (instead of empty string)
         // see also the same method in handleStartGame
         const startingState = newGameData.startingState || '';
+        const startingPossibleMoves = newGameData.possibleMoves;
         navigate(`/game/${newGameData.gameId}`, {
-          state: { side: 'LIGHT', playerId: 1, startingState },
+          state: {
+            side: 'LIGHT',
+            playerId: 1,
+            startingState,
+            startingPossibleMoves,
+          },
         });
       }
     } catch (error) {
@@ -47,19 +63,20 @@ function StartPage() {
 
   const handleJoinGame = async () => {
     try {
-      const storedGameId = inputGameId || gameId;      
-      
+      const storedGameId = inputGameId || gameId;
+
       if (!storedGameId) {
         alert('You must enter a game ID!');
         return;
       }
       setGameId(storedGameId);
 
-
       const joinGameData = await joinGame(storedGameId, 2);
 
       const startingState = joinGameData.startingState || '';
-      console.log(`Joining game ${storedGameId} with starting state ${startingState}`);
+      console.log(
+        `Joining game ${storedGameId} with starting state ${startingState}`
+      );
       navigate(`/game/${storedGameId}`, {
         state: { side: 'DARK', playerId: 2, startingState },
       });

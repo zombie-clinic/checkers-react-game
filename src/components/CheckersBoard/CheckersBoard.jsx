@@ -5,16 +5,22 @@ import InfoPanel from '../InfoPanel/InfoPanel.jsx';
 import { isArraysEqual } from '../../utils/isArraysEqual.js';
 import { getCellColor } from '../../utils/getCellColor.js';
 import styles from './CheckersBoard.module.css';
-import checkerData from '../../data/newgame.json'; // переписать, чтобы брать из InitialBoardState.json
-import InitialBoardState from '../../data/InitialBoardState.json';
+// import checkerData from '../../data/newgame.json'; // переписать, чтобы брать из InitialBoardState.json
+// import InitialBoardState from '../../data/InitialBoardState.json';
 
-const CheckerBoard = ({ gameId, side, playerId, startingState }) => {
-  // const [playerId, setPlayerId] = useState(); //on gameStart
-  // const [playerSide, setPlayerSide] = useState(side); //on gameStart
-  // const [currentGameId, setCurrentGameId] = useState(gameId); //on gameStart
-  console.log('CheckerBoard props:', gameId, side, playerId, startingState);
-  const [darkPositions, setDarkPositions] = useState(JSON.parse(startingState).dark);
-  const [lightPositions, setLightPositions] = useState(JSON.parse(startingState).light);
+const CheckerBoard = ({
+  gameId,
+  side,
+  playerId,
+  startingState,
+  startingPossibleMoves,
+}) => {
+  const [darkPositions, setDarkPositions] = useState(
+    JSON.parse(startingState).dark
+  );
+  const [lightPositions, setLightPositions] = useState(
+    JSON.parse(startingState).light
+  );
   const [isOpponentTurn, setIsOpponentTurn] = useState(false); // opponent's turn is default
   const [possibleMoves, setPossibleMoves] = useState([]); // move strings [1-2, 2-3, ...]
   const [sideToMove, setSideToMove] = useState();
@@ -22,7 +28,7 @@ const CheckerBoard = ({ gameId, side, playerId, startingState }) => {
   const [startMoveCell, setStartMoveCell] = useState(null); // Начальная клетка
   const [highlightedCell, setHighlightedCell] = useState(null); // Подсвеченная ячейка
   const [moveData, setMoveData] = useState(null); // Состояние для moveData только для CheckersBoardDebug!
-  
+
   // Преобразуем possibleMoves в массив строк и устанавливаем state
   const formatAndSetPossibleMoves = possibleMoves => {
     const formattedMoves = Object.entries(possibleMoves).flatMap(
@@ -62,9 +68,9 @@ const CheckerBoard = ({ gameId, side, playerId, startingState }) => {
     // Создаем начальные ходы один раз при загрузке компонента
     const initializePossibleMoves = () => {
       if (side === 'LIGHT') {
-        // Получаем список ходов из InitialBoardState
-        formatAndSetPossibleMoves(InitialBoardState.possibleMoves);
-        setFullPossibleMoves(InitialBoardState.possibleMoves);
+        // Получаем список ходов из startingPossibleMoves
+        formatAndSetPossibleMoves(startingPossibleMoves);
+        setFullPossibleMoves(startingPossibleMoves);
       } else if (side === 'DARK') {
         updateBoardState();
         setIsOpponentTurn(true); // setting 2nd turn for 'DARK'-side player
@@ -80,7 +86,7 @@ const CheckerBoard = ({ gameId, side, playerId, startingState }) => {
       if (isOpponentTurn) {
         updateBoardState();
       }
-    }, 7000); // 1 time per second
+    }, 2000); // 2 time per second
 
     return () => {
       clearInterval(fetchDataInterval); // Clear the interval when the component unmounts
@@ -224,12 +230,3 @@ const CheckerBoard = ({ gameId, side, playerId, startingState }) => {
 };
 
 export default CheckerBoard;
-
-{
-  /* <InfoPanel
-  isOpponentTurn={isOpponentTurn}
-  side={side}
-  data={{ state: { dark: darkPositions, light: lightPositions } }}
-  possibleMoves={possibleMoves}
-/>; */
-}

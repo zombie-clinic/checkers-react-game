@@ -1,0 +1,17 @@
+{
+  "state": {
+    "dark": [1, 2],
+    "light": [21]
+  },
+  "side": "LIGHT",
+  "possibleMoves": {
+    "21": [
+      {
+        "position": 21,
+        "destination": 17,
+        "isCapture": false,
+        "isTerminal": true
+      }
+    ]
+  }
+}
