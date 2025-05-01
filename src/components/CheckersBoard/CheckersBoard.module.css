@@ -1,32 +1,3 @@
-/* Style for the table
-/* .boardTable {
-  border-collapse: collapse;
-  margin: 20px auto;
-} */
-
-/* Style for the table cells */
-/* .tableCell {
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  vertical-align: middle;
-  font-weight: bold;
-}; */
-
-/* Style for the even rows */
-/* .tableRow:nth-child(even) .tableCell:nth-child(odd),
-.tableRow:nth-child(odd) .tableCell:nth-child(even) {
-  background-color: #333; 
-  color: #fff; 
-} */
-
-/* Style for the odd rows */
-/* .tableRow:nth-child(odd) .tableCell:nth-child(odd),
-.tableRow:nth-child(even) .tableCell:nth-child(even) {
-  background-color: #fff; 
-  color: #000; 
-} */
-
 .container {
   display: flex;
   align-items: flex-start;
@@ -62,6 +33,7 @@
 }
 
 .checkerPiece {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -109,4 +81,14 @@
 
 .debug {
   flex-grow: 1; /* Чтобы отладка занимала оставшееся пространство */
+}
+
+.king {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16px;
+  font-weight: bold;
+  pointer-events: none;
 }

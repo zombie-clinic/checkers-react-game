@@ -21,6 +21,7 @@ const CheckerBoard = ({
   const [lightPositions, setLightPositions] = useState(
     JSON.parse(startingState).light
   );
+  const [kings, setKings] = useState([]);
   const [isOpponentTurn, setIsOpponentTurn] = useState(false); // opponent's turn is default
   const [possibleMoves, setPossibleMoves] = useState([]); // move strings [1-2, 2-3, ...]
   const [sideToMove, setSideToMove] = useState();
@@ -50,6 +51,7 @@ const CheckerBoard = ({
       ) {
         setDarkPositions(data.state.dark);
         setLightPositions(data.state.light);
+        setKings(data.state.kings || []);
         formatAndSetPossibleMoves(data.possibleMoves);
         setFullPossibleMoves(data.possibleMoves);
 
@@ -86,7 +88,7 @@ const CheckerBoard = ({
       if (isOpponentTurn) {
         updateBoardState();
       }
-    }, 2000); // 2 time per second
+    }, 2000); // 1 time per 2 seconds
 
     return () => {
       clearInterval(fetchDataInterval); // Clear the interval when the component unmounts
@@ -162,13 +164,12 @@ const CheckerBoard = ({
           }
 
           const isHighlighted = cellNumber === highlightedCell;
+          const isKing = kings.includes(cellNumber);
+          const isDark = darkPositions.includes(cellNumber);
+          const isLight = lightPositions.includes(cellNumber);
 
           const cellText =
-            isBlackCell && darkPositions.includes(cellNumber)
-              ? '⚫'
-              : isBlackCell && lightPositions.includes(cellNumber)
-              ? '⚪'
-              : '';
+            isBlackCell && isDark ? '⚫' : isBlackCell && isLight ? '⚪' : '';
 
           return (
             <td
@@ -183,6 +184,14 @@ const CheckerBoard = ({
                 }`}
               >
                 {cellText}
+                {isKing && (
+                  <div
+                    className={styles.king}
+                    style={{ color: isDark ? 'white' : 'black' }}
+                  >
+                    K
+                  </div>
+                )}
               </div>
               <div className={styles.cellLabel}>{cellNumber}</div>
             </td>
@@ -218,6 +227,7 @@ const CheckerBoard = ({
             gameId,
             dark: darkPositions,
             light: lightPositions,
+            kings: kings,
             isOpponentTurn,
             possibleMoves,
             fullPossibleMoves,
