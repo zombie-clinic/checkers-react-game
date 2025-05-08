@@ -37,8 +37,10 @@ function StartPage() {
 
   const handleImportGame = async () => {
     try {
-      const state = importGameState.trim() === '' ? JSON.parse('{"dark":[1,2],"light":[21,17],"kings":[]}')
-       : JSON.parse(importGameState.trim());
+      const state =
+        importGameState.trim() === ''
+          ? JSON.parse('{"dark":[1,2],"light":[21,17],"kings":[]}')
+          : JSON.parse(importGameState.trim());
       const newGameData = await startImportedGame(1, 'LIGHT', state);
       if (newGameData?.gameId) {
         setGameId(newGameData.gameId);

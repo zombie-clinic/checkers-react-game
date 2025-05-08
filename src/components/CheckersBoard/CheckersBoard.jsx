@@ -122,6 +122,7 @@ const CheckerBoard = ({
           state: {
             dark: darkPositions,
             light: lightPositions,
+            kings: kings,
           },
           playerId,
         };
