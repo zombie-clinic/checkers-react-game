@@ -40,7 +40,13 @@ export const joinGame = async (gameId, playerId) => {
   return response.data;
 };
 
-// Новый PUT-запрос для отправки хода
+/**
+ * PUT a new move to a specified game. 
+ * 
+ * @param {String} gameId 
+ * @param {JSON} moveData 
+ * @returns 
+ */
 export const submitMove = async (gameId, moveData) => {
   try {
     const response = await axios.put(
@@ -55,23 +61,12 @@ export const submitMove = async (gameId, moveData) => {
   }
 };
 
-//Get current state of a game (the result of the last move)
+/** 
+ * GET current state of a game (the result of the last move).
+ */
 export const getCheckersPositions = async gameId => {
   const { data } = await instance.get(`/games/${gameId}/moves`);
   console.log('fetching board state');
   return data;
 };
 
-// the game API
-
-// GET
-// /game
-// Get games
-
-// POST
-// /game
-// Start a new game
-
-// GET
-// /game/{gameId}
-// Find game by ID

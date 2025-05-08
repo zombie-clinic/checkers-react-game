@@ -37,8 +37,8 @@ function StartPage() {
 
   const handleImportGame = async () => {
     try {
-      const state = JSON.parse('{"dark":[1,2],"light":[21,17]}');
-      // const state = JSON.parse(importGameState);
+      const state = importGameState === '' ? JSON.parse('{"dark":[1,2],"light":[21,17],"kings":[]}')
+       : JSON.parse(importGameState);
       const newGameData = await startImportedGame(1, 'LIGHT', state);
       if (newGameData?.gameId) {
         setGameId(newGameData.gameId);
@@ -57,7 +57,7 @@ function StartPage() {
         });
       }
     } catch (error) {
-      console.error('Error starting a new game:', error);
+      console.error('Error importing a game:', error);
     }
   };
 
