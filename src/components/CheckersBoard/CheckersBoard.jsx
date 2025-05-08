@@ -21,7 +21,7 @@ const CheckerBoard = ({
   const [lightPositions, setLightPositions] = useState(
     JSON.parse(startingState).light
   );
-  const [kings, setKings] = useState([]);
+  const [kings, setKings] = useState(JSON.parse(startingState).kings);
   const [isOpponentTurn, setIsOpponentTurn] = useState(false); // opponent's turn is default
   const [possibleMoves, setPossibleMoves] = useState([]); // move strings [1-2, 2-3, ...]
   const [sideToMove, setSideToMove] = useState();
