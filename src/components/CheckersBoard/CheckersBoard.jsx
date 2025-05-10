@@ -67,6 +67,7 @@ const CheckerBoard = ({
   };
 
   useEffect(() => {
+    console.log('first useEffect')
     // Создаем начальные ходы один раз при загрузке компонента
     const initializePossibleMoves = () => {
       if (side === 'LIGHT') {
@@ -80,20 +81,13 @@ const CheckerBoard = ({
     };
 
     initializePossibleMoves(); // Вызываем функцию инициализации
+
   }, []); // Выполняется один раз после загрузки
 
-  useEffect(() => {
-    // console.log(`Polling: isOpponentTurn=${isOpponentTurn}`);
-    const fetchDataInterval = setInterval(() => {
-      if (isOpponentTurn) {
-        updateBoardState();
-      }
-    }, 2000); // 1 time per 2 seconds
-
-    return () => {
-      clearInterval(fetchDataInterval); // Clear the interval when the component unmounts
-    };
-  }, [isOpponentTurn, darkPositions, lightPositions]); // Add dataFetched to the dependency array
+  useGameUpdates(isOpponentTurn, (message) => {
+    console.log("Update:", message);
+    // Update game state here (updateBoardState)
+  });
 
   const handleCellClick = async cellNumber => {
     if (startMoveCell === null) {
@@ -241,3 +235,30 @@ const CheckerBoard = ({
 };
 
 export default CheckerBoard;
+
+export function useGameUpdates(shouldConnect, onUpdate) {
+  useEffect(() => {
+    if (!shouldConnect) return;
+
+    const source = new EventSource('http://localhost:8080/sse/subscribe');
+  
+    source.onmessage = (e) => {
+      console.log("Default message: ", e.data);
+      onUpdate(e.data);
+    };
+
+    source.addEventListener("game-update", (e) => {
+      console.log("Game update: ", e.data);
+      onUpdate(e.data);
+    });
+
+    source.onerror = (e) => {
+      source.close();
+      console.error("SSE error:", e);
+    };
+
+    return () => {
+      source.close();
+    };
+  }, [shouldConnect, onUpdate]);
+}
