@@ -1,6 +1,7 @@
 .container {
   display: flex;
   align-items: flex-start;
+  /* flex-wrap: wrap; Добавлено для возможности переноса */
   gap: 20px; /* Расстояние между доской и дебаг-таблицей */
 }
 
@@ -17,8 +18,8 @@
   border: 2px solid black;
   flex-shrink: 0; /* Чтобы доска не сжималась */
 
-  width: min(70vh, 70vw); /* Делаем доску квадратной */
-  height: min(70vh, 70vw);
+  width: min(70vh, 90vw); /* Делаем доску квадратной */
+  height: min(70vh, 90vw);
 }
 
 .cell {
@@ -37,8 +38,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 24px; /* Увеличиваем размер символа */
   transition: transform 0.3s ease;
+  font-size: clamp(0.8vw, 5vh, 4vw); /* адаптивный размер */
 }
 
 .pulsing {
@@ -88,7 +89,31 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 16px;
+  font-size: clamp(0.5vw, 3vh, 3vw);
   font-weight: bold;
   pointer-events: none;
+}
+
+/* Поведение при сужении вьюпорта */
+@media (max-width: 950px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .debug {
+    width: 100%;
+    max-width: 600px;
+  }
+}
+
+/* Дополнительная защита от выхода за край на совсем маленьких экранах */
+@media (max-width: 330px) {
+  .checkerboard {
+    width: 100vw;
+    height: 100vw;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0 auto;
+  }
 }

@@ -3,8 +3,12 @@
 }
 
 .debugTable {
-  min-width: 35%;
-  max-width: 40%;
+  min-width: 28%;
+  max-width: 60%;
+  table-layout: fixed; /* Позволяет фиксировать ширину и контролировать поведение содержимого */
+  word-wrap: break-word; /* Перенос слов */
+  word-break: break-word; /* Перенос длинных слов */
+  overflow-wrap: break-word; /* Поддержка старых браузеров */
   text-align: left;
   border-collapse: collapse;
   font-size: 12px;
@@ -14,6 +18,9 @@
 .debugTable td {
   border: 1px solid #ddd;
   padding: 4px;
+  white-space: normal; /* Отключает запрет на перенос */
+  min-width: 96px; /* можно варьировать — 60–100px, в зависимости от данных */
+  word-break: break-word;
 }
 
 .debugTable th {
