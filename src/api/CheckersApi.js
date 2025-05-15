@@ -24,7 +24,7 @@ export const startImportedGame = async (player, side, state) => {
   const requestData = {
     playerId: player,
     side: side,
-    state: state,
+    clientState: state,
   };
   const response = await instance.post('/games?isImport=true', requestData);
   return response.data;
@@ -41,11 +41,11 @@ export const joinGame = async (gameId, playerId) => {
 };
 
 /**
- * PUT a new move to a specified game. 
- * 
- * @param {String} gameId 
- * @param {JSON} moveData 
- * @returns 
+ * PUT a new move to a specified game.
+ *
+ * @param {String} gameId
+ * @param {JSON} moveData
+ * @returns
  */
 export const submitMove = async (gameId, moveData) => {
   try {
@@ -61,7 +61,7 @@ export const submitMove = async (gameId, moveData) => {
   }
 };
 
-/** 
+/**
  * GET current state of a game (the result of the last move).
  */
 export const getCheckersPositions = async gameId => {
@@ -69,4 +69,3 @@ export const getCheckersPositions = async gameId => {
   console.log('fetching board state');
   return data;
 };
-

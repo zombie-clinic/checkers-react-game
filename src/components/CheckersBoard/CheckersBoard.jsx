@@ -46,12 +46,12 @@ const CheckerBoard = ({
       console.log('Server response:', data);
 
       if (
-        !isArraysEqual(data.state.dark, darkPositions) ||
-        !isArraysEqual(data.state.light, lightPositions)
+        !isArraysEqual(data.serverState.dark, darkPositions) ||
+        !isArraysEqual(data.serverState.light, lightPositions)
       ) {
-        setDarkPositions(data.state.dark);
-        setLightPositions(data.state.light);
-        setKings(data.state.kings || []);
+        setDarkPositions(data.serverState.dark);
+        setLightPositions(data.serverState.light);
+        setKings(data.serverState.kings || []);
         formatAndSetPossibleMoves(data.possibleMoves);
         setFullPossibleMoves(data.possibleMoves);
 
@@ -119,7 +119,7 @@ const CheckerBoard = ({
         const newMoveData = {
           side,
           move,
-          state: {
+          clientState: {
             dark: darkPositions,
             light: lightPositions,
             kings: kings,
@@ -213,7 +213,9 @@ const CheckerBoard = ({
           <InfoPanel
             isOpponentTurn={isOpponentTurn}
             side={side}
-            data={{ state: { dark: darkPositions, light: lightPositions } }}
+            data={{
+              localState: { dark: darkPositions, light: lightPositions },
+            }}
             possibleMoves={possibleMoves}
           />
         </div>
