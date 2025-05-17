@@ -4,24 +4,25 @@ import getGameResultMessage from '../../utils/endgameCondition.jsx';
 
 const InfoPanel = ({ isOpponentTurn, side, data, possibleMoves }) => {
   const getGameResultMessage = () => {
-    if (possibleMoves.length === 0) {
-      return 'GAME OVER';
-    }
-
+    const messages = [];
     const yourPieces =
       side === 'DARK' ? data.localState.dark : data.localState.light;
     const opponentPieces =
       side === 'DARK' ? data.localState.light : data.localState.dark;
 
     if (yourPieces.length > 0 && opponentPieces.length === 0) {
-      return 'YOU WIN!';
+      messages.push('YOU WIN!');
     }
 
     if (yourPieces.length === 0 && opponentPieces.length > 0) {
-      return 'YOU LOSE!';
+      messages.push('YOU LOSE!');
     }
 
-    return null;
+    if (possibleMoves.length === 0) {
+      messages.push('GAME OVER');
+    }
+
+    return messages.length > 0 ? messages : null;
   };
 
   const yourLostPieces =
@@ -46,7 +47,13 @@ const InfoPanel = ({ isOpponentTurn, side, data, possibleMoves }) => {
         &nbsp; Opponent: {side === 'DARK' ? '⚪' : '⚫'} x {opponentLostPieces}
       </div>
       {resultMessage && (
-        <div className={styles.gameResult}>{resultMessage}</div>
+        <div className={styles.gameResult}>
+          {Array.isArray(resultMessage) ? (
+            resultMessage.map((msg, idx) => <div key={idx}>{msg}</div>)
+          ) : (
+            <div>{resultMessage}</div>
+          )}
+        </div>
       )}
     </div>
   );
