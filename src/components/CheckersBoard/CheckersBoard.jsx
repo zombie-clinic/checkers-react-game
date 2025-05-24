@@ -5,8 +5,6 @@ import InfoPanel from '../InfoPanel/InfoPanel.jsx';
 import { isArraysEqual } from '../../utils/isArraysEqual.js';
 import { getCellColor } from '../../utils/getCellColor.js';
 import styles from './CheckersBoard.module.css';
-// import checkerData from '../../data/newgame.json'; // переписать, чтобы брать из InitialBoardState.json
-// import InitialBoardState from '../../data/InitialBoardState.json';
 
 const CheckerBoard = ({
   gameId,

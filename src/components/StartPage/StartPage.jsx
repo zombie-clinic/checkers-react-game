@@ -5,6 +5,7 @@ import {
   joinGame,
   startImportedGame,
 } from '../../api/CheckersApi';
+import { playerSubscribe } from '../../api/SseApi.js';
 import styles from './StartPage.module.css';
 
 function StartPage() {
@@ -12,6 +13,15 @@ function StartPage() {
   const [inputGameId, setInputGameId] = useState('');
   const [importGameState, setImportGameState] = useState('');
   const navigate = useNavigate();
+
+  const subscribeToGame = async (gameId, playerId) => {
+    try {
+      const data = await playerSubscribe({ gameId, playerId });
+      console.log('Subscribed:', data);
+    } catch (err) {
+      console.error('Subscription failed:', err);
+    }
+  };
 
   const handleStartGame = async () => {
     try {
@@ -29,6 +39,7 @@ function StartPage() {
             startingPossibleMoves,
           },
         });
+        await subscribeToGame(gameId, 1);
       }
     } catch (error) {
       console.error('Error starting a new game:', error);
@@ -49,6 +60,7 @@ function StartPage() {
         // see also the same method in handleStartGame
         const startingState = newGameData.startingState || '';
         const startingPossibleMoves = newGameData.possibleMoves;
+
         navigate(`/game/${newGameData.gameId}`, {
           state: {
             side: 'LIGHT',
@@ -57,6 +69,7 @@ function StartPage() {
             startingPossibleMoves,
           },
         });
+        await subscribeToGame(gameId, 1);
       }
     } catch (error) {
       console.error('Error importing a game:', error);
@@ -82,6 +95,7 @@ function StartPage() {
       navigate(`/game/${storedGameId}`, {
         state: { side: 'DARK', playerId: 2, startingState },
       });
+      await subscribeToGame(storedGameId, 2);
     } catch (error) {
       console.error('Error joining game:', error);
     }
