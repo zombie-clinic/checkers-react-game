@@ -1,9 +1,8 @@
 import React from 'react';
 import styles from './InfoPanel.module.css';
-import getGameResultMessage from '../../utils/endgameCondition.jsx';
 
 const InfoPanel = ({ isOpponentTurn, side, data, possibleMoves }) => {
-  const getGameResultMessage = () => {
+  const calculateResultMessages = () => {
     const messages = [];
     const yourPieces =
       side === 'DARK' ? data.localState.dark : data.localState.light;
@@ -35,11 +34,11 @@ const InfoPanel = ({ isOpponentTurn, side, data, possibleMoves }) => {
     (side === 'DARK'
       ? data.localState.light.length
       : data.localState.dark.length);
-  const resultMessage = getGameResultMessage();
+  const resultMessage = calculateResultMessages();
 
   return (
     <div className={styles.infoPanel}>
-      <div className={isOpponentTurn ? styles.oppTurn : styles.yourTurn}>
+      <div className={isOpponentTurn ? styles.opponentTurn : styles.yourTurn}>
         {isOpponentTurn ? "OPPONENT'S TURN" : 'YOUR TURN'}
       </div>
       <div className={styles.pieceStats}>
