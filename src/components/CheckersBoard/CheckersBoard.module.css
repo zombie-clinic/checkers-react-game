@@ -1,35 +1,33 @@
 .container {
   display: flex;
   align-items: flex-start;
-  /* flex-wrap: wrap; Добавлено для возможности переноса */
-  gap: 20px; /* Расстояние между доской и дебаг-таблицей */
+  gap: 20px; /* spacing between board and debug table */
 }
 
 .board-wrapper {
   flex-grow: 50%;
   display: flex;
-  flex-direction: column; /* Ставим элементы в колонку */
-  align-items: center; /* Центрируем доску и InfoPanel */
-  gap: 10px; /* Расстояние между доской и InfoPanel */
+  flex-direction: column; /* place items vertically */
+  align-items: center; /* center board and InfoPanel */
+  gap: 10px; /* spacing between board and InfoPanel */
 }
 
 .checkerboard {
   border-collapse: collapse;
   border: 2px solid black;
-  flex-shrink: 0; /* Чтобы доска не сжималась */
+  flex-shrink: 0; /* prevent the board from shrinking */
 
-  width: min(70vh, 90vw); /* Делаем доску квадратной */
+  width: min(70vh, 90vw); /* keep the board square */
   height: min(70vh, 90vw);
 }
 
 .cell {
-  width: 12.5%; /* 100% / 8 клеток */
+  width: 12.5%; /* 100% / 8 cells */
   height: 12.5%;
   text-align: center;
   vertical-align: middle;
   font-size: 30px;
 
-  /* position: relative; */
   cursor: pointer;
 }
 
@@ -39,7 +37,7 @@
   justify-content: center;
   align-items: center;
   transition: transform 0.3s ease;
-  font-size: clamp(0.8vw, 5vh, 4vw); /* адаптивный размер */
+  font-size: clamp(0.8vw, 5vh, 4vw); /* responsive size */
 }
 
 .pulsing {
@@ -61,10 +59,6 @@
   background-color: #0a9754;
   color: white;
   position: relative;
-  /* display: flex;
-  flex-direction: row;
-  justify-content: center;
-  text-align: center; */
 }
 
 /* Styling for white cells */
@@ -81,7 +75,7 @@
 }
 
 .debug {
-  flex-grow: 1; /* Чтобы отладка занимала оставшееся пространство */
+  flex-grow: 1; /* allow debug area to take remaining space */
 }
 
 .king {
@@ -94,7 +88,7 @@
   pointer-events: none;
 }
 
-/* Поведение при сужении вьюпорта */
+/* Responsive behaviour */
 @media (max-width: 950px) {
   .container {
     flex-direction: column;
@@ -107,7 +101,7 @@
   }
 }
 
-/* Дополнительная защита от выхода за край на совсем маленьких экранах */
+/* Extra protection on very small screens */
 @media (max-width: 330px) {
   .checkerboard {
     width: 100vw;

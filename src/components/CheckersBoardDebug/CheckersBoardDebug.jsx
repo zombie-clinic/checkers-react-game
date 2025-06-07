@@ -1,4 +1,3 @@
-// import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './CheckersBoardDebug.module.css';
 
@@ -7,7 +6,7 @@ function CheckersBoardDebug({ state, moveData }) {
     <div className={styles.debugContainer}>
       <h3>Debug State</h3>
 
-      {/* Таблица состояния */}
+      {/* State table */}
       <table className={styles.debugTable}>
         <thead>
           <tr>
@@ -31,7 +30,7 @@ function CheckersBoardDebug({ state, moveData }) {
         </tbody>
       </table>
 
-      {/* Таблица moveData */}
+      {/* Move data table */}
       <h3>Move Data</h3>
       <table className={styles.debugTable}>
         <thead>
@@ -69,7 +68,7 @@ function CheckersBoardDebug({ state, moveData }) {
 
 CheckersBoardDebug.propTypes = {
   state: PropTypes.object.isRequired,
-  moveData: PropTypes.object, // moveData может быть объектом или null
+  moveData: PropTypes.object,
 };
 
 export default CheckersBoardDebug;

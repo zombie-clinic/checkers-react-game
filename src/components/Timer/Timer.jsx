@@ -21,4 +21,3 @@ export function convertUnixTimeToFormattedDate(unixTime) {
   return formattedDate;
 }
 
-console.log(convertUnixTimeToFormattedDate(unixTime));

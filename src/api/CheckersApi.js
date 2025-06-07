@@ -16,7 +16,6 @@ export const startNewLobby = async (player, side) => {
     side: side,
   };
   const response = await instance.post('/games', requestData);
-  // console.log('Posting a new game:', response.data);
   return response.data;
 };
 
@@ -36,7 +35,6 @@ export const joinGame = async (gameId, playerId) => {
     playerId,
   };
   const response = await instance.put('/games', requestData);
-  console.log('Joining game:', response.data);
   return response.data;
 };
 
@@ -66,6 +64,5 @@ export const submitMove = async (gameId, moveData) => {
  */
 export const getCheckersPositions = async gameId => {
   const { data } = await instance.get(`/games/${gameId}/moves`);
-  console.log('fetching board state');
   return data;
 };
