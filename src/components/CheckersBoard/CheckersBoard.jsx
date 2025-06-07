@@ -5,8 +5,6 @@ import InfoPanel from '../InfoPanel/InfoPanel.jsx';
 import { isArraysEqual } from '../../utils/isArraysEqual.js';
 import { getCellColor } from '../../utils/getCellColor.js';
 import styles from './CheckersBoard.module.css';
-// import checkerData from '../../data/newgame.json'; // переписать, чтобы брать из InitialBoardState.json
-// import InitialBoardState from '../../data/InitialBoardState.json';
 
 const CheckerBoard = ({
   gameId,
@@ -22,15 +20,15 @@ const CheckerBoard = ({
     JSON.parse(startingState).light
   );
   const [kings, setKings] = useState(JSON.parse(startingState).kings);
-  const [isOpponentTurn, setIsOpponentTurn] = useState(false); // opponent's turn is default
-  const [possibleMoves, setPossibleMoves] = useState([]); // move strings [1-2, 2-3, ...]
+  const [isOpponentTurn, setIsOpponentTurn] = useState(false); // opponent moves first by default
+  const [possibleMoves, setPossibleMoves] = useState([]); // move strings like 1-2
   const [sideToMove, setSideToMove] = useState();
-  const [fullPossibleMoves, setFullPossibleMoves] = useState([]); // full moves object
-  const [startMoveCell, setStartMoveCell] = useState(null); // Начальная клетка
-  const [highlightedCell, setHighlightedCell] = useState(null); // Подсвеченная ячейка
-  const [moveData, setMoveData] = useState(null); // Состояние для moveData только для CheckersBoardDebug!
+  const [fullPossibleMoves, setFullPossibleMoves] = useState([]); // complete move objects
+  const [startMoveCell, setStartMoveCell] = useState(null); // starting cell
+  const [highlightedCell, setHighlightedCell] = useState(null); // highlighted cell
+  const [moveData, setMoveData] = useState(null); // data for CheckersBoardDebug only
 
-  // Преобразуем possibleMoves в массив строк и устанавливаем state
+  // Convert possibleMoves to an array of strings and store in state
   const formatAndSetPossibleMoves = possibleMoves => {
     const formattedMoves = Object.entries(possibleMoves).flatMap(
       ([position, moves]) =>
@@ -39,11 +37,10 @@ const CheckerBoard = ({
     setPossibleMoves(formattedMoves);
   };
 
-  // Функция для обновления состояния доски
+  // Fetch the latest board state from the server
   const updateBoardState = async () => {
     try {
       const data = await getCheckersPositions(gameId);
-      console.log('Server response:', data);
 
       if (
         !isArraysEqual(data.serverState.dark, darkPositions) ||
@@ -55,11 +52,9 @@ const CheckerBoard = ({
         formatAndSetPossibleMoves(data.possibleMoves);
         setFullPossibleMoves(data.possibleMoves);
 
-        // console.log('Server response side:', data.side);
-        // console.log('Current player side:', side);
         setIsOpponentTurn(side !== data.side);
         setSideToMove(data.side);
-        return data; //REMOVE THIS AFTER TEST
+        return data;
       }
     } catch (error) {
       console.error('Error updating board state:', error);
@@ -67,10 +62,10 @@ const CheckerBoard = ({
   };
 
   useEffect(() => {
-    // Создаем начальные ходы один раз при загрузке компонента
+    // Initialize moves once when the component mounts
     const initializePossibleMoves = () => {
       if (side === 'LIGHT') {
-        // Получаем список ходов из startingPossibleMoves
+        // Use the move list from startingPossibleMoves
         formatAndSetPossibleMoves(startingPossibleMoves);
         setFullPossibleMoves(startingPossibleMoves);
       } else if (side === 'DARK') {
@@ -79,43 +74,42 @@ const CheckerBoard = ({
       }
     };
 
-    initializePossibleMoves(); // Вызываем функцию инициализации
-  }, []); // Выполняется один раз после загрузки
+    initializePossibleMoves();
+  }, []); // run only once on mount
 
   useEffect(() => {
-    // console.log(`Polling: isOpponentTurn=${isOpponentTurn}`);
     const fetchDataInterval = setInterval(() => {
       if (isOpponentTurn) {
         updateBoardState();
       }
-    }, 2000); // 1 time per 2 seconds
+    }, 2000); // poll every two seconds
 
     return () => {
       clearInterval(fetchDataInterval); // Clear the interval when the component unmounts
     };
-  }, [isOpponentTurn, darkPositions, lightPositions]); // Add dataFetched to the dependency array
+  }, [isOpponentTurn, darkPositions, lightPositions]);
 
   const handleCellClick = async cellNumber => {
     if (startMoveCell === null) {
-      // Проверяем, принадлежит ли шашка текущей стороне
+      // Check that the piece belongs to the current player
       const playerCheckers = side === 'LIGHT' ? lightPositions : darkPositions;
       if (playerCheckers.includes(cellNumber)) {
         setStartMoveCell(cellNumber);
-        setHighlightedCell(cellNumber); // Подсветка ячейки
+        setHighlightedCell(cellNumber); // highlight the selected cell
       }
     } else {
-      // Получаем возможные ходы из fullPossibleMoves
+      // Retrieve available moves from fullPossibleMoves
       const moveOptions = fullPossibleMoves[startMoveCell] || [];
       const selectedMove = moveOptions.find(m => m.destination === cellNumber);
 
       if (selectedMove) {
-        // Определяем, является ли ход взятием
+        // Determine if the move is a capture
         const isCapture = selectedMove.isCapture;
         const move = isCapture
           ? `${startMoveCell}x${cellNumber}`
           : `${startMoveCell}-${cellNumber}`;
 
-        // Валидный ход
+        // Valid move
         const newMoveData = {
           side,
           move,
@@ -126,30 +120,26 @@ const CheckerBoard = ({
           },
           playerId,
         };
-        setMoveData(newMoveData); // Обновляем состояние moveData
-        console.log('Move data:', newMoveData);
+        setMoveData(newMoveData); // update move data for debugging
         try {
-          // Отправить данные хода на сервер
+          // Submit move to the server
           await submitMove(gameId, newMoveData);
-          console.log('Move successfully submitted:', newMoveData);
-          // Reset состояния после успешного хода
+          // Reset state after a successful move
           setStartMoveCell(null);
           setHighlightedCell(null);
-          // updateBoardState(); // UNCOMMENT BACK AFTER TEST
-          const updatedData = await updateBoardState(); // Дожидаемся обновленных данных; REMOVE AFTER TEST
-          console.log('Updated board state:', updatedData); // Выводим обновленные данные; REMOVE AFTER TEST
+          const updatedData = await updateBoardState();
         } catch (error) {
           console.error('Failed to submit move:', error);
         }
       } else {
-        // Невалидный ход
+        // Invalid move
         setStartMoveCell(null);
         setHighlightedCell(null);
       }
     }
   };
 
-  // Генерация доски
+  // Generate the board markup
   const renderTable = () => {
     let blackCellCounter = side === 'LIGHT' ? 0 : 33;
     return Array.from({ length: 8 }, (_, row) => (

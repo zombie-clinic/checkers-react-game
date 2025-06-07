@@ -45,8 +45,6 @@ function StartPage() {
       if (newGameData?.gameId) {
         setGameId(newGameData.gameId);
 
-        // todo what would be the default starting state (instead of empty string)
-        // see also the same method in handleStartGame
         const startingState = newGameData.startingState || '';
         const startingPossibleMoves = newGameData.possibleMoves;
         navigate(`/game/${newGameData.gameId}`, {
@@ -76,9 +74,6 @@ function StartPage() {
       const joinGameData = await joinGame(storedGameId, 2);
 
       const startingState = joinGameData.startingState || '';
-      console.log(
-        `Joining game ${storedGameId} with starting state ${startingState}`
-      );
       navigate(`/game/${storedGameId}`, {
         state: { side: 'DARK', playerId: 2, startingState },
       });

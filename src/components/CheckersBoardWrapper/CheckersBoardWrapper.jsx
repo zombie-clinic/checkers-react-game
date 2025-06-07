@@ -5,10 +5,10 @@ function CheckersBoardWrapper() {
   const { gameId } = useParams();
   const location = useLocation();
   const { side, playerId, startingState, startingPossibleMoves } =
-    location.state || {}; // Берём из state, если есть
+    location.state || {}; // use navigation state if present
 
   if (!side || !playerId) {
-    return <div>Error: Missing game data.</div>; // На случай, если зашли напрямую без state
+    return <div>Error: Missing game data.</div>; // fallback when visiting directly
   }
 
   return (
